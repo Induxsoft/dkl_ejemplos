@@ -1,0 +1,111 @@
+//Este es un comentario de una sola línea
+/*
+    Y este es un bloque de comentarios de varias líneas
+    ***************************************************
+    Hasta este punto, ya sabes como escribir comentarios
+    en tu código fuente.
+
+    LECCIÓN 1
+*/
+
+#include "dkli.dkh" //Esta directiva carga los patrones de sintaxis del lenguaje imperativo
+
+#! //Esta directiva conmuta al modo imperativo
+
+program "leccion1" //Este es el nodo raíz del árbol y la identificación del programa
+{
+/***********************************************************************************************************/
+    #include "funciones_leccion1.dkl" //Esta directiva carga el código de funciones de ejemplo
+    //La carga de bibliotecas y otras inclusiones, deben realizarse dentro del nodo raíz generalmente
+
+/***********************************************************************************************************/
+
+    //Definiciones de funciones
+
+    menu:: //Esta es una función sin argumentos
+    {
+        
+        while 1 //Este es un ciclo infinito, que solo se romperá con una sentencia return o break
+        {
+            do imprime_opciones()
+
+            opt=val( input("Opción:") )
+            //La función val(s) convierte el valor de cadena en un número,
+            //la función input('texto') espera por una entrada de consola
+            //confirmada con la tecla ENTER.
+            //
+            if not(evaluarOpcion(opt)) //En DKL no existe el operador NOT, en su lugar existe una función
+            {
+                break
+            }
+        }
+        
+    }
+
+    evaluarOpcion::opcion //Esta es una función con un argumento (parámetro)
+    {
+        switch opcion
+        {
+            case 1
+            {
+                do holaMundo()
+            }
+            case 2 
+            {
+                do ejemplo_IF()
+            }
+            case 3
+            {
+                do ejemplo_SWITCH()
+            }
+            case 4
+            {
+                do cicloFOR()
+            }
+            case 5
+            {
+                do cicloWHILE()
+            }
+            case 6
+            {
+                do cicloREPEAT()
+            }
+            case 9
+            {
+                return 0
+            }
+            default
+            {
+                do print("Este número de opción no es válido")
+            }
+        }
+
+        return 1
+    }
+
+    imprime_opciones::
+    {
+        do print("Aprendiendo a programar con DKL")
+        do print("*******************************")
+        do print("Opciones:")
+        do print("1 - Función Hola Mundo Turbocargada")
+        do print("2 - Sentencia if de control de flujo")
+        do print("3 - Sentencia switch de control de flujo")
+        do print("4 - Ciclo for")
+        do print("5 - Ciclo while")
+        do print("6 - Ciclo repeat")
+        do print("9 - Salir")
+
+        do print("") //Esto deja una línea vacía en la salida de consola
+        do print("Escribe el número de la opción y pulsa ENTER") 
+    }
+
+/***********************************************************************************************************/
+//A partir de este punto inicia la ejecución imperativa
+do print("Empezamos!!!!")
+
+do menu() //Invocamos a la función que imprime las opciones de menú
+
+
+}
+

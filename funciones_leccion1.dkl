@@ -1,0 +1,118 @@
+#include "dkli.dkh" 
+#!
+module "Ejemplos de la Lección 1"
+{
+    holaMundo::
+    {
+        nombre=input("Cómo te llamas?") //Se declara la variable al momento que se inicializa
+        otra_variable="Y hola "
+        otra_variable=otra_variable+nombre //Las cadenas se concatenan con el operador +
+
+        edad=val(input("Cuántos años tienes?")) //Esta variable es numérica
+
+        do print ("Hola Mundo")
+        do print (otra_variable)
+
+        //La función str convierte un número en una cadena, como puedes ver la expresión edad+10 es una suma
+        do print ("En 10 años, tendrás " + str(edad+10)+" años." )
+
+        do input("Presiona ENTER")
+    }
+
+    ejemplo_IF::
+    {
+        a=val(input("Escribe un número:"))
+        b=val(input("Escribe otro número:"))
+
+        if a<b
+        {
+            do print(str(a)+" es menor que " + str(b))
+        }
+        else if a>b
+        {
+            do print(str(a)+" es mayor que " + str(b))
+        }
+        else
+        {
+            do print(str(a)+" y " + str(b)+ " son iguales")
+        }
+
+        do input("Presiona ENTER")
+    }
+
+    ejemplo_SWITCH::
+    {
+        o=input("Escribe en minúsculas tu color favorito y pulsa ENTER:")
+
+        switch o
+        {
+            case "rojo"
+            {
+                do print("Tu color favorito es el rojo")
+            }
+            case "verde"
+            {
+                do print("Tu color favorito es el verde")
+            }
+            case "azul"
+            {
+                do print("Tu color favorito es el azul")
+            }
+            case "blanco"
+            {
+                do print("Tu color favorito es el blanco")
+            }
+            default
+            {
+                do print("Tu color favorito no es ni rojo, ni verde, ni azul y tampoco blanco")
+            }
+        }
+        do input("Presiona ENTER para continuar")
+    }
+
+    cicloFOR::
+    {
+        inicio=val(input("Empezar en el número:"))
+        final=val(input("Terminar en el número:"))
+
+        //Para avanzar de 2 en e por ejemplo, puedes modificar la sentencia así:
+        //for i=inicio;i<final;i+2
+        //Pruébalo
+        for i=inicio;i<final
+        {
+            do print(str(i))
+        }
+
+        
+        do input("Presiona ENTER para continuar")
+    }
+
+    cicloWHILE::
+    {
+        final=val(input("Empezaremos en 1 y terminaremos en el número:"))
+        i=1
+        
+        while i<final+1
+        {
+            do print(str(i))
+            i=i+1
+        }
+
+        
+        do input("Presiona ENTER para continuar")
+    }
+
+    cicloREPEAT::
+    {
+        
+        veces=val(input("Número de iteraciones:"))
+        
+        repeat veces
+        {
+            do print("Hola")
+        }
+
+        
+        do input("Presiona ENTER para continuar")
+    }
+}
