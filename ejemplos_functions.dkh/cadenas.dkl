@@ -1,0 +1,75 @@
+﻿#include "dkli.dkh"
+#!
+
+program
+{
+    #include "functions.dkh"
+
+    //trim(c) rtrim(c) ltrim(c)
+    cadena="  El mundo es muy amplio \t "
+
+    do print("*"+cadena +"*")
+    do print("*"+trim(cadena)+"*")
+    do print("*"+ltrim(cadena)+"*")
+    do print("*"+rtrim(cadena)+"*")
+
+    //left(c,n) right(c,n) substring(c,i,l)
+    cadena="Pero el espacio es inconmensurable"
+
+    do print(cadena)
+
+    do print(left(cadena,5))
+
+    do print(right(cadena,15))
+
+    do print(substring(cadena,5,10))
+
+    //lremove(c,n) remove(c,i,l) rremove(c,n)
+    cadena="Había una vez un lobo"
+
+    do print(cadena)
+
+    do print(lremove(cadena,5))
+
+    do print(remove(cadena,6,7))
+
+    do print(rremove(cadena,10))
+
+    //length(c) toupper(c) tolower(c)
+
+    do print(str(length(cadena)))
+
+    do print(toupper(cadena))
+
+    do print(tolower(cadena))
+
+    //padright(c,n) padleft(c,n)
+    cadena="Hola"
+
+    do print(padleft(cadena,10,"+"))
+    do print(padright(cadena,10,"+"))
+
+    //replace(c,b,r)
+    cadena="El árbol es viejo"
+
+    do print(cadena)
+    do print(replace(cadena,"árbol", "mar"))
+
+    //split
+    cadena="rojo,azul,verde"
+
+    do print(cadena)
+    ref l=split(cadena,",")
+
+    for i=0;i<list.count(l)
+    {
+        do print(list.str(l,i))
+    }
+
+    //contains(c,sc)
+    cadena="El agua está formada por oxígeno e hidrógeno"
+
+    do print(str(contains(cadena, "oxígeno")))
+    do print(str(contains(cadena, "sodio")))
+
+}
