@@ -15,7 +15,7 @@
 program "leccion1" //Este es el nodo raíz del árbol y la identificación del programa
 {
 /***********************************************************************************************************/
-    #include "funciones_leccion1.dkl" //Esta directiva carga el código de funciones de ejemplo
+    #include "funciones.dkl" //Esta directiva carga el código de funciones de ejemplo
     //La carga de bibliotecas y otras inclusiones, deben realizarse dentro del nodo raíz generalmente
 
 /***********************************************************************************************************/
