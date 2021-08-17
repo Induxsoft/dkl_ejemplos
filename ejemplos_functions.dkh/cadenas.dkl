@@ -12,6 +12,7 @@ program
     do print("*"+trim(cadena)+"*")
     do print("*"+ltrim(cadena)+"*")
     do print("*"+rtrim(cadena)+"*")
+    do print("\n")
 
     //left(c,n) right(c,n) substring(c,i,l)
     cadena="Pero el espacio es inconmensurable"
@@ -24,36 +25,34 @@ program
 
     do print(substring(cadena,5,10))
 
+    do print("\n")
+
     //lremove(c,n) remove(c,i,l) rremove(c,n)
     cadena="Había una vez un lobo"
 
     do print(cadena)
 
     do print(lremove(cadena,5))
-
+   
     do print(remove(cadena,6,7))
 
     do print(rremove(cadena,10))
 
+    do print("\n")
+
     //length(c) toupper(c) tolower(c)
 
-    do print(str(length(cadena)))
+    cadena = "En el lejano horizonte"
+
+    do print (cadena)
+
+    do print (length(cadena))
 
     do print(toupper(cadena))
 
     do print(tolower(cadena))
 
-    //padright(c,n) padleft(c,n)
-    cadena="Hola"
-
-    do print(padleft(cadena,10,"+"))
-    do print(padright(cadena,10,"+"))
-
-    //replace(c,b,r)
-    cadena="El árbol es viejo"
-
-    do print(cadena)
-    do print(replace(cadena,"árbol", "mar"))
+    do print("\n")
 
     //split
     cadena="rojo,azul,verde"
@@ -65,11 +64,101 @@ program
     {
         do print(list.str(l,i))
     }
+    do print("\n")
+
+    //replace(c,b,r)
+    cadena="El árbol es viejo"
+
+    do print(cadena)
+    do print(replace(cadena,"árbol", "mar"))
+    do print("\n")
+
+    //padright(c,n) padleft(c,n)
+    cadena="Hola"
+
+    do print(padleft(cadena,10,"+"))
+    do print(padright(cadena,10,"+"))
+    do print("\n") 
 
     //contains(c,sc)
     cadena="El agua está formada por oxígeno e hidrógeno"
 
     do print(str(contains(cadena, "oxígeno")))
     do print(str(contains(cadena, "sodio")))
+    do print("\n")
 
+    //findstrex(cadena, subcadena, sensible) findstr(cadena, subcadena)
+    cadena = "La playa es enorme"
+    do print(cadena)
+
+    /*  Ejemplos con findstrex
+        1er ejemplo Retorna -1, ya que el tercer parámetro es true, y es sensíble la busqueda a la mayúsucula
+        2do ejemplo Retorna el número de posición de inicio de "Es", a pesar 
+        que inicia con mayúscula, pues al ser false el 3er parámetro, no afecta en mayúsuculas
+        3er ejemplo Retorna -1, al no encontrar "azul" en la cadena asignada
+    */
+    do print(findstrex(cadena,"Es", 1))
+    do print(findstrex(cadena,"Es", 0))
+    do print(findstrex(cadena, "azul",0))
+
+    /*  Ejemplos con findstr
+        A diferencia de findstrex(), únicamente se reciben dos parámetros en esta función, ya que
+        automáticamente la busqueda de la subcadena no es sensible a mayúsculas y mínusculas.
+        1er Ejemplo, el retorno de la posición de inicio
+        2o Ejemplo, retorna -1 al no encontrar "azul" en la cadena
+    */
+    do print(findstr(cadena, "Es"))
+    do print (findstr(cadena, "azul"))
+    do print("\n")
+
+    //ranychars(cad,car,car_reemplazo) ranydiffchars(cad,car,car_reemplazo)
+    cadena = "El lobo es blanco"
+
+    do print(cadena)
+    do print(ranychars(cadena,"o","a")) //Sustituye los caracteres "o" por "a"
+    do print(ranydiffchars(cadena,"lob ","x")) //Los caracateres "l" "o" "b" y espacio, no serán sustituidos por x
+    do print("\n")
+
+    //cut(cad,long)
+    cadena = "El niño perdió su globo"
+
+    do print(cadena)
+    do print(cut(cadena,14))//Se devuelve la cadena a partir del valor dado en el segundo parámetro con base 0, siendo 14 el número de caracteres.
+    do print("\n")
+
+    //format(num,formato)
+    do print(format(24122021, "dd-MM-yyyy"))
+
+    do print("\n")
+
+    //isany(car,cad) containschar(cad, cad_car)
+    cadena = "El cielo es gris"
+
+    do print(cadena)
+    do print(isany("z", cadena))//Retorna falso, al no estar el caracter "z" en la cadena
+    do print(isany("S", cadena))//Retorna falso, pues el caracter "S" es mayúsucula y no se encuentra dentro de la cadena
+    do print(isany("s", cadena))//Retorna verdadero.
+
+    do print(containschar(cadena, "zS"))//Retorna falso al no estar incluido ningúno de los caracteres
+    do print(containschar(cadena, "z S"))//Retorna verdadero, aunque no se encuenre "Z" "S", el espacio sí se encuentra en la cadena
+    do print("\n")
+
+    //containsword(cadena, lista_palabras)
+    cadena = "El reflejo de la luz en el agua es naranja"
+   
+    do print(cadena)
+    do print(containsword(cadena, "oscuro,grande,azul"))//Retorna falso, al no encontrarse ningún elemento del listado dentro de la cadena.
+    do print(containsword(cadena, "oscuro,grande,azul,g"))//Retorna verdadero, al encontrar al menos un elemento del listado dentro de la cadena.
+    do print("\n")
+
+
+    //isanyword(cadena, lista_palabras) El primer parámetro debe se una sola palabra
+    cadena = "Globo"
+
+    do print(cadena)
+    do print(isanyword(cadena, "oscuro,E,n,G"))//Retorna falso, pues ningun elemento del listado coincide con la palabra de la cadena.
+    do print(isanyword(cadena, "oscuro,E,n,Globo"))//Retorna verdadero, ya que en el listado, se encuentra el valor de la cadena.
+    
+    //from.args(lista, separador) from.argsn(lista, separador, numéricos)
+    do print(from.args())
 }
