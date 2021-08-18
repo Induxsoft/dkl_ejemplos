@@ -4,23 +4,18 @@
 program
 {
     #include "functions.dkh"
+
+    // now() - Devuelve una referencia a un objeto DateTime de .Net con la fecha y hora actuales
+    ref hoy_a_esta_hora=now()
+
     //str2dt (cadena) Devuelve una referencia a una estructura DateTime de .Net 
    // que corresponde a la cadena indicada si es posible hacer la conversión.
-    cadena="6, 7, 2021"
-    do print(cadena)
-    do print(str2dt(cadena,"6"))
-    do print(str2dt(cadena,"7"))
-    do print(str2dt(cadena,"2021"))
-
-    do print("\n") 
+    
+    ref independencia_mexico=str2dt("1810-09-16T00:00:00")
 
     //date_str(fechahora,formato)Devuelve una cadena que corresponde con la fecha (DateTime) indicada con el formato especificado. 
-    date_str="15, 12, 2021"
-    do print(format(15122021,"dd-MM-yyyy"))
-    do print(format(234520,"HH:mm:ss"))
-
-    do print("\n")
-
-     
+    
+    do print("Hoy a esta hora: " + date_str(hoy_a_esta_hora,"dd/MMM/yyyy hh:mm:ss"))
+    do print("La independencia de México fue: " + date_str(independencia_mexico,"dd/MMM/yyyy hh:mm:ss"))
       
 }
