@@ -1,0 +1,58 @@
+#include "dkli.dkh"
+#!
+module ":Usuario"
+{
+    @table = "usuarios"
+
+    login::&db,&data
+    {
+        ref usuario = dbr.rec(db,"select * from usuarios where nombre = @usuario and contrasenia = md5(@contrasenia)",data)
+        if isnull(usuario) {
+            do rise_error(99,"El nombre de usuario o contraseña son incorrectos")
+        }
+
+        @_ids = uuid()
+        do cookie.set("_token",@_ids)
+    }
+
+    logout::
+    {
+        @_ids = ""
+        do cookie.set("_token",@_ids)
+    }
+
+    list::&db,&params
+    {
+        sql = "select * from usuarios"
+        return dbr.list(db,sql,params)
+    }
+
+    read::&db,&params
+    {
+        sql = "select * from usuarios where id = @id"
+        return dbr.rec(db,sql,params)
+    }
+
+    create::&db,&params,&data
+    {
+        data<"contrasenia"> : md5(@@(data,"$contrasenia"))
+        do dbr.insert(db,@table,data)
+        params<"id"> : dbr.num(db,"select last_insert_id()",@null)
+
+        return read(db,params)
+    }
+
+    update::&db,&params,&data
+    {
+        data<"contrasenia"> : md5(@@(data,"$contrasenia"))
+        do dbr.update(db,@table,data,"id = @id",params)
+
+        return read(db,params)
+    }
+
+    delete::&db,&params
+    {
+        do dbr.delete(db,@table,"id = @id",params)
+        return @null
+    }
+}

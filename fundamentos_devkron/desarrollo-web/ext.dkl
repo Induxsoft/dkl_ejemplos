@@ -1,0 +1,6 @@
+#include "dkli.dkh"
+#$
+program ""
+{
+    h6{"Probando el enrutamiento por extensión 'ext.map'"}
+}

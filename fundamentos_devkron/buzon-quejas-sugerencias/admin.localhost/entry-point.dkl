@@ -1,0 +1,52 @@
+#include "dkli.dkh"
+#!
+module "entry-point"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "dbr.dkh"
+    #include "cookies.dkl"
+    #include "website.dkl"
+
+    // Permite la petición desde cualquier origen para acceder al recurso
+    @http_context<"response/headers/Access-Control-Allow-Origin"> : "*"
+    // Permite al servicio soportar todos los métodos http
+    @http_context<"response/headers/Access-Control-Allow-Methods"> : "*"
+    // "Content-Type, Authorization, X-Requested-With"
+    @http_context<"response/headers/Access-Control-Allow-Headers"> : "*"
+
+    if @@(@http_context,"$request/headers/REQUEST_METHOD")=="OPTIONS" { return }
+
+    ref @_GET = _params()
+    ref @_POST = _payload()
+    ref database = dbr.open("buzon@localhost")
+
+    @base_path = "web/admin.localhost/"
+    @_ids = cookie.get("_token")
+
+    switch @@(@_GET,"$app")
+    {
+        case "usuarios"
+        {
+            include path.concat(@base_path,"model/Usuario.dkl")
+            include path.concat(@base_path,"controller/UsuarioController.dkl")
+            break
+        }
+        case "mensajes"
+        {
+            include path.concat(@base_path,"model/Mensaje.dkl")
+            include path.concat(@base_path,"controller/MensajeController.dkl")
+            break
+        }
+        default
+        {
+            if @_ids != "" {
+                include path.concat(@base_path,"view/home.dk")
+            } else {
+                include path.concat(@base_path,"view/login.dk")
+            }
+        }
+    }
+
+    do dbr.close(database)
+}

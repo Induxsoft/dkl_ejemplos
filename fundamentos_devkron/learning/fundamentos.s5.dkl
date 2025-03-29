@@ -1,0 +1,34 @@
+#include "dkli.dkh"
+#!
+program "Fundamentos de programación con DevKron"
+{
+    /**
+    * #! CONTEXTO IMPERATIVO
+    *
+    * Los elementos de interpretan al estilo de cualquier lenguaje, es decir, declación de variables, llamadas a funciones, ciclos, etc...
+    */
+    do print("Hola mundo")
+
+    /**
+    * #$ CONTEXTO DECLARATIVO
+    *
+    * Los elementos son transformados a su equivalente XML tal como han sido declarados.
+    * Útil para trabajar con XML o crear sitios Web
+    */
+    #$
+    do print("Hola mundo")
+
+    /**
+    * ## CONMUTACIÓN DE CONTEXTO
+    *
+    * Alternar entre el contexto imperativo (#!) y el contexto declarativo (#$)
+    */
+    ## // #!
+    do print("Hola mundo")
+    ## // #$
+
+    // Caracteres sin escapar - útil para interpretar HTML en el navegador
+    div(class="..."){$"Hola <br> mundo"}
+    // Caracteres escapados - Cuando no queremos que el navegador interprete HTML de la cadena
+    div(class="..."){"Hola <br> mundo"}
+}

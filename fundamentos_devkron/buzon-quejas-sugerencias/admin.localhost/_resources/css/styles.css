@@ -1,0 +1,107 @@
+.login-container {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 320px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 4px;
+    outline: none;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background: #0078D7;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.cards-container {
+    display: flex;
+    gap: .5rem;
+}
+
+.cards-container a { text-decoration: none; }
+
+.card {
+    transition: .3s;
+    outline: 1px solid transparent;
+    border: 1px solid #DDD;
+    border-radius: 4px;
+    color: black;
+    padding: 0 5px;
+    min-width: 100px;
+}
+
+.card:hover {
+    box-shadow: 3px 3px 9px 0 #DDD;
+    outline: 1px solid #DDD;
+    color: black;
+}
+
+.action-bar {
+    display: flex;
+    gap: .5rem;
+    margin-bottom: 15px;
+}
+
+.action-bar a { text-decoration: none; }
+
+table {
+    border-collapse: collapse;
+}
+
+.fw-bold { font-weight: bold; }
+
+.form-info {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.form-info label { font-weight: bold; }
+
+.form-item {
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.form-label {
+    display: block;
+}
+
+.form-input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid black;
+    outline: none;
+}
+
+.form-button {
+    padding: 5px;
+}

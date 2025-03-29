@@ -1,0 +1,37 @@
+#include "dkli.dkh"
+#$
+module "inicio"
+{
+    html
+    {
+        head
+        {
+            meta(charset="UTF-8")
+            title{"Inicio de sesión"}
+            link(href="/_resources/css/styles.css" rel="stylesheet")
+        }
+
+        body
+        {
+            h1{"Backoffice"}
+
+            div(class="action-bar")
+            {
+                a(href="/usuarios/_logout/"){"Cerrar sesión"}
+            }
+
+            div(class="cards-container")
+            {
+                a(href="/usuarios/")
+                {
+                    div(class="card"){ h4{"Usuarios"} }
+                }
+
+                a(href="/mensajes/")
+                {
+                    div(class="card"){ h4{"Mensajes"} }
+                }
+            }
+        }
+    }
+}

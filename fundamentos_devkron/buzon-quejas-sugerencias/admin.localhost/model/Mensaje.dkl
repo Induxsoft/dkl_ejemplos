@@ -1,0 +1,41 @@
+#include "dkli.dkh"
+#!
+module ":Mensaje"
+{
+    @table = "mensajes"
+
+    list::&db,&params
+    {
+        sql = "select *, if(ifnull(queja,0)=0, 'Sugerencia', 'Queja') as tipo from mensajes"
+        return dbr.list(db,sql,params)
+    }
+
+    read::&db,&params
+    {
+        sql = "select * from mensajes where id = @id"
+        return dbr.rec(db,sql,params)
+    }
+
+    create::&db,&params,&data
+    {
+        do field.remove(data,"referrer")
+        
+        do dbr.insert(db,@table,data)
+        params<"id"> : dbr.num(db,"select last_insert_id()",@null)
+
+        return read(db,params)
+    }
+
+    update::&db,&params,&data
+    {
+        do dbr.update(db,@table,data,"id = @id",params)
+
+        return read(db,params)
+    }
+
+    delete::&db,&params
+    {
+        do dbr.delete(db,@table,"id = @id",params)
+        return @null
+    }
+}

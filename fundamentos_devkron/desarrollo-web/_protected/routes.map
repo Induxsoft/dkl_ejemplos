@@ -1,0 +1,6 @@
+#Enrutamiento por URL y transferencia de parámetros
+#Sintaxis:
+# [Métodos HTTP:] Patron_URL > programa_dkl
+
+GET: /clientes/{id_cliente}/ > clientes.dkl
+GET,POST: /clientes/{id_cliente}/reportes/{id_reporte?}/ > reportes.dkl

@@ -1,0 +1,21 @@
+#include "dkli.dkh"
+#!
+program ""
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    new datos
+    {
+        @"success": @true
+        member @"data"
+        {
+            @"nombre": "Juan"
+            @"apellidos": "Pérez López"
+        }
+    }
+
+    @http_context<"response/headers/Content-Type"> : "application/json; charset=utf-8"
+    @http_context<"response/output"> : "text"
+    @http_context<"response/text"> : to.json(datos)
+}

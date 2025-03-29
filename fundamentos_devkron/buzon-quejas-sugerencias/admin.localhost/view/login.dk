@@ -1,0 +1,41 @@
+#include "dkli.dkh"
+#set "meta-xml-declaration" "<!DOCTYPE html>\r\n"
+#$
+module "login"
+{
+    html
+    {
+        head
+        {
+            meta(charset="UTF-8")
+            title{"Inicio de sesión"}
+            link(href="/_resources/css/styles.css" rel="stylesheet")
+            script(src="/_resources/js/usuarios.js"){""}
+        }
+
+        body
+        {
+            div(class="login-container")
+            {
+                h1{"Iniciar sesión"}
+
+                form(action="" method="POST" onsubmit="login(event)")
+                {
+                    div(class="input-group")
+                    {
+                        label("for"="usuario"){"Usuario:"}
+                        input(type="text" name="usuario" id="usuario" required="")
+                    }
+
+                    div(class="input-group")
+                    {
+                        label("for"="contrasenia"){"Contraseña:"}
+                        input(type="password" name="contrasenia" id="contrasenia" required="")
+                    }
+
+                    button(type="submit"){"Ingresar"}
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,34 @@
+#include "dkli.dkh"
+#$
+module "usuario.list.dk"
+{
+    html
+    {
+        head
+        {
+            meta(charset="UTF-8")
+            title{"Usuarios"}
+            style
+            {$'
+                pre {
+                    width: fit-content;
+                    padding: .5rem;
+                    background-color: #F5F5F5;
+                }
+            '}
+        }
+
+        body
+        {
+            h1{"Error"}
+
+            button(type="button" onclick="window.history.back();"){"Volver"}
+
+            pre {
+                code {
+                    $"#<@@(response,'$message')>"
+                }
+            }
+        }
+    }
+}

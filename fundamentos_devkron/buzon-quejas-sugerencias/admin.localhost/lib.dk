@@ -1,0 +1,20 @@
+#include "dkli.dkh"
+#!
+module "Funciones de propósito general"
+{
+    function _params()
+    {
+        return ifnull(@@(@http_context,"&request/get"),record.create())
+    }
+
+    function _payload()
+    {
+        ref post = ifnull(@@(@http_context,"&request/post"),record.create())
+        if list.count(list.create_from_fields(post)) < 1 {
+            post_string = trim(field.dstr(@http_context,"request/post_string","{}"))
+            if post_string == "" { post_string = "{}" }
+            ref post:from.json(post_string)
+        }
+        return post
+    }
+}

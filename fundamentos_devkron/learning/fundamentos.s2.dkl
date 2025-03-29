@@ -1,0 +1,171 @@
+#include "dkli.dkh"
+#!
+program "Fundamentos de programación con DevKron"
+{
+    // FUNCIONES
+
+    // function MiFuncion() {/*implentación*/}
+    // MiFuncion:: {/*implentación*/}
+
+    function Sumar(a,b)
+    {
+        return a + b
+    }
+
+    Restar::a,b
+    {
+        return a - b
+    }
+
+    do print(Sumar(7,3))
+    do print(Restar(7,3))
+
+    function HacerAlgo()
+    {
+        HacerOtraCosa::
+        {
+            do print("> HacerOtraCosa()")
+        }
+
+        function Imprimir(texto)
+        {
+            do print(texto)
+        }
+
+        do print("> HacerAlgo()")
+        do HacerOtraCosa()
+        do Imprimir("Funciones dentro de funciones")
+    }
+
+    // do HacerOtraCosa()
+    do HacerAlgo()
+    // do HacerOtraCosa()
+
+    function ProcesarDatos(&datos)
+    {
+        nombre, apellidos << datos
+        do print(nombre + " " + apellidos)
+
+        telefono = "999 999 9999"
+        correo = "gustavo@gmail.com"
+
+        telefono, correo >> datos
+        // datos<"telefono"> : telefono
+        // datos<"correo"> : correo
+    }
+
+    new cliente
+    {
+        @"nombre": "Gustavo"
+        @"apellidos": "Salazar"
+
+        member @"domicilio"
+        {
+            codigo_postal := ""
+            calle := ""
+            colonia := ""
+        }
+    }
+    /**
+    * Salida esperada
+    {
+        "nombre": "Gustavo",
+        "apellidos": "Salazar"
+        "domicilio":
+        {
+            "codigo_postal": ""
+            "calle": ""
+            "colonia": ""
+        }
+    }
+    */
+    do ProcesarDatos(cliente)
+
+    tel = cliente.telefono
+    mail : cliente<"correo">
+
+    do print("Telefono: " + tel)
+    do print("Correo: " + mail)
+
+    // Funciones abiertas
+    function TablaDeMultiplicar(numero,limite)
+    {
+        expose resultado
+
+        for i=1; i <= limite
+        {
+            resultado = str(numero) + " X " + str(i) + " = " + str(numero * i)
+            that
+        }
+    }
+
+    go TablaDeMultiplicar(resultado:rst) with(7,10)
+    {
+        do print(rst)
+    }
+
+    point vf to Sumar
+    that vf(8,1)->resultado
+    do print(resultado)
+
+    /**
+    * Ambitos
+    *
+    * Global: Variables declaradas como globales que están disponibles en cualquier ámbito.
+    * Principal: Consiste en el código fuera de las funciones ó el contenido del nodo (`program`,`module`,`codeblock`)
+    * De Función: Corresponde al bloque de código de una función.
+    */
+
+    // include "learning/fundamentos.s1.dkl"
+    // function Func()
+    // {
+    //     do print(@variable_global)
+    // }
+    // do Func()
+
+    //BLOQUES DE CÓDIGO
+    /**
+    * program "" {}
+    * module "" {}
+    * codeblock "" {}
+    */
+
+    // function Func1(a)
+    // {
+    //     do print("> Func1()")
+    // }
+
+    module "Descripción del módulo opcional :Espacio1"
+    {
+        function Func1()
+        {
+            do print("> Espacio1.Func1()")
+        }
+
+        function Func2()
+        {
+            do Func1()
+        }
+    }
+
+    module ":MiEspacioDeNombre"
+    {
+        function MiFuncionConNombreMuyLargo()
+        {
+            do print("> MiEspacioDeNombre.MiFuncionConNombreMuyLargo()")
+        }
+
+        function Func1()
+        {
+            do print("> MiEspacioDeNombre.Func1()")
+        }
+    }
+
+    do Espacio1.Func2()
+    
+    alias "MiEspacioDeNombre.MiFuncionConNombreMuyLargo" "FuncionCorta"
+    do FuncionCorta()
+
+    namespace "MiEspacioDeNombre"
+    do Func1()
+}

@@ -1,0 +1,85 @@
+#include "dkli.dkh"
+#!
+module "UsuarioController"
+{
+    ref data = @null
+    new response
+    {
+        @"success": @true
+    }
+
+    method = @@(@http_context,"$request/headers/REQUEST_METHOD")
+    accept = @@(@http_context,"$request/headers/http_accept")
+    view = ""
+    href = ""
+    mid = @@(@_GET,"$id")
+
+    switch method
+    {
+        case "GET"
+        {
+            if mid != ""
+            {
+                view = "mensaje.form.dk"
+                ref data:Mensaje.read(database,@_GET)
+            }
+            else
+            {
+                view = "mensaje.list.dk"
+                ref data:Mensaje.list(database,@_GET)
+            }
+            break
+        }
+        case "POST"
+        {
+            href = field.dstr(@_POST,"referrer","/mensajes/")
+
+            if mid == "_new"
+            {
+                if href != "/mensajes/" { @_ids = "__ignore__" }
+                ref data:Mensaje.create(database,@_GET,@_POST)
+            }
+            else
+            {
+                ref data:Mensaje.update(database,@_GET,@_POST)
+            }
+            break
+        }
+        case "DELETE"
+        {
+            do Mensaje.delete(database,@_GET)
+            break
+        }
+    }
+
+    if @_ids == "" {
+        @http_context<"response/headers/location"> : "/"
+        return
+    }
+
+    response<"data*"> : data
+    exception
+    {
+        using response
+        {
+            @"success": @false
+            @"message": last_error()
+        }
+    }
+
+    if contains(accept,"html") && not(response.success) {
+        include path.concat(@base_path,"view/error.dk")
+    }
+    else if contains(accept,"html") && method == "GET" {
+        include path.concat(@base_path,"view/"+view)
+    }
+    else if contains(accept,"html") && method == "POST" {
+        @http_context<"response/headers/location"> : href
+    }
+    else if contains(accept,"json")
+    {
+        @http_context<"response/headers/Content-Type"> : "application/json; charset=utf-8"
+		@http_context<"response/output"> : "text"
+		@http_context<"response/text"> : to.json(response)
+    }
+}

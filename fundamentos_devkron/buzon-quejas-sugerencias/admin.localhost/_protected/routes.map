@@ -1,0 +1,2 @@
+*: /{app}/ > /entry-point.dkl
+*: /{app}/{id}/ > /entry-point.dkl

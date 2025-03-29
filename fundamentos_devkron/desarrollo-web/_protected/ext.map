@@ -1,0 +1,5 @@
+#Enrutamiento por extensión
+#Sintaxis:
+# [Metodo HTTP] : .extension > recurso_local
+
+GET: .api > ext.dkl

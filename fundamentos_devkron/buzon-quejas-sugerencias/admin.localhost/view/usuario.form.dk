@@ -1,0 +1,41 @@
+#include "dkli.dkh"
+#$
+module "usuario.form.dk"
+{
+    html
+    {
+        head
+        {
+            meta(charset="UTF-8")
+            title{"Usuarios"}
+            link(href="/_resources/css/styles.css" rel="stylesheet")
+        }
+
+        body
+        {
+            h1{"Usuarios"}
+
+            div(class="action-bar")
+            {
+                a(href="/usuarios/"){"Volver"}
+            }
+
+            form(action="" method="POST" style="width:320px;text-align:right;")
+            {
+                div(class="form-item")
+                {
+                    label(class="form-label fw-bold" "for"="nombre"){"Nombre"}
+                    input(class="form-input" type="text" name="nombre" value="#<@@(data,'$nombre')>" maxlength="100" required="")
+                }
+
+                div(class="form-item")
+                {
+                    label(class="form-label fw-bold" "for"="contrasenia"){"Contraseña"}
+                    input(class="form-input" type="password" name="contrasenia" value="#<@@(data,'$contrasenia')>" maxlength="255" required="")
+                }
+
+                button(class="form-button" type="submit"){"Aceptar"}
+            }
+        }
+    }
+}

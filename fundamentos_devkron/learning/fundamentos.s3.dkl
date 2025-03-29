@@ -1,0 +1,163 @@
+#include "dkli.dkh"
+#!
+program "Fundamentos de programación con DevKron"
+{
+    module "Funciones incorporadas"
+    {
+        codeblock "Interoperabilidad .Net"
+        {
+            // https://docs.induxsoft.net/es/devkron/Referencia-del-lenguaje/Funciones-incorporadas/Interoperabilidad-dotNet.md
+        }
+
+        codeblock "Conversiones"
+        {
+            cadena = str(68) //Salida: "68"
+            numero = val("68") //Salida: 68
+        }
+
+        codeblock "Manejo de errores"
+        {
+            do rise_error(500,"Excepción no controlada.")
+
+            exception
+            {
+                do errordet(0)
+
+                // do pop_exception()
+                // do clear_exceptions()
+
+                codigo = last_error_code()
+                mensaje = last_error()
+
+                do print("Código del error: " + str(codigo))
+                do print("Mensaje del error: " + mensaje)
+
+                do errordet(1)
+            }
+        }
+
+        codeblock "Sistema"
+        {
+            // https://docs.induxsoft.net/es/devkron/Referencia-del-lenguaje/Funciones-incorporadas/Sistema.md
+            new datos
+            {}
+
+            if isset("datos") { do print("La variable `datos` esta definida") }
+            else { do print("La variable `datos` no esta definida") }
+
+            if isnull(datos) { do print("La variable de referencia `datos` es nulo.") }
+
+            nombre = "Alfonso"
+            mensaje = "Hola #<nombre>"
+
+            do print(ftext(mensaje))
+        }
+
+        codeblock "Matemáticas"
+        {
+            // https://docs.induxsoft.net/es/devkron/Referencia-del-lenguaje/Funciones-incorporadas/Matematicas.md
+            numero = 123.456
+
+            do print(round(numero,2)) //Devuelve el numero redondeado a la cantidad de decimales proporcionado
+            do print(trun(numero)) //Devuelve la parte entera de un numero
+            do print(dec(numero)) //Devuelve la parte fraccionaria de un numero
+            do print(abs(-10)) //Devuelve el valor absoluto de un número
+        }
+
+        codeblock "Fecha y Hora"
+        {
+            hoy = ndatetime.now()
+            anio = ndatetime.year(hoy)
+            mes = ndatetime.month(hoy)
+            dia = ndatetime.day(hoy)
+            maniana = ndatetime.add(hoy,1,"d") // [d | m | y] => intervalo
+            ayer = ndatetime.add(hoy,-1,"d")
+
+            fecha = ndatetime.fromstr("2024-03-24","yyyy-MM-dd")
+
+            do print("Hoy: " + str(hoy))
+            do print("Año: " + str(anio))
+            do print("Mes: " + str(mes))
+            do print("Dia: " + str(dia))
+            do print("Mañana: " + str(maniana))
+            do print("Ayer: " + str(ayer))
+
+            do print("Fecha: " + str(fecha))
+            do print("Diferencia en dias: " + str(ndatetime.diff(hoy,fecha,"d")))
+            do print("Diferencia en meses: " + str(ndatetime.diff(hoy,fecha,"m")))
+            do print("Diferencia en años: " + str(ndatetime.diff(hoy,fecha,"y")))
+        }
+    }
+
+    module "Funciones de propósito general"
+    {
+        // https://docs.induxsoft.net/es/devkron/Bibliotecas-de-funciones/functions/functions.md
+        #include "functions.dkh"
+
+        new registro
+        {
+            @"prop1": "Valor 1"
+            @"prop3": 3
+        }
+        
+        /**
+        * Comodines para `@@()`
+        *
+        * $ Indicar valores de cadena.
+        * # Indicar valores numericos.
+        * & Indicar valores de referencia.
+        */
+        var1 = @@(registro,"$prop2")
+        var2 = @@(registro,"#prop2")
+        ref var3 = @@(registro,"&prop2")
+
+        do print("Var 1 = " + var1)
+        do print("Var 2 = " + str(var2))
+        do print("Var 3 = " + str(var3))
+
+        ref lista = list.create()
+        do list.add(lista, var1) //index=0
+        do list.add(lista, var2) //index=1
+        do list.add(lista, var3) //index=2
+
+        do list.del(lista,1)
+    }
+
+    module "Serialización"
+    {
+        // https://docs.induxsoft.net/es/devkron/Bibliotecas-de-funciones/serialize/serialize.md
+        #include "serialize.dkh"
+
+        do print("Lista: " + to.json(lista))
+
+        ref array = from.json('
+        {
+            "k1": "v1",
+            "k2": "v2",
+            "k3": {}
+        }
+        ')
+        do print(to.json(array))
+
+        ref list = from.json('[1,"a",null,false]')
+        do print(to.json(list))
+    }
+
+    module "Cliente HTTP y SMTP"
+    {
+        // https://docs.induxsoft.net/es/devkron/Bibliotecas-de-funciones/webcl/webcl.md
+        #include "webcl.dkh"
+
+        url = "https://jsonplaceholder.typicode.com/posts/1/"
+        metodo = "GET"
+        new encabezados
+        {
+            @"Content-Type": "application/json"
+        }
+        new cargaUtil
+        {}
+
+        respuesta = http.request(url,metodo,encabezados,to.json(cargaUtil))
+        do print(respuesta)
+    }
+}

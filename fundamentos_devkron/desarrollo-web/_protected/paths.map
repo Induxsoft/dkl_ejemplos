@@ -1,0 +1,9 @@
+#Enrutamiento por recurso virtual
+#Sintaxis:
+# [Metodos HTTP:] Patrón_URL > ruta_fisica
+
+# Devuelve un recurso específico
+GET: /notas.txt > $learning/resources/notas.txt
+
+# Devolver resursos variables
+GET: /public/* > $learning/resources/*

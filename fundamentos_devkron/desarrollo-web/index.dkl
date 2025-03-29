@@ -1,0 +1,71 @@
+﻿#include "dkli.dkh"
+#set "meta-xml-declaration" "<!DOCTYPE html>\r\n"
+
+#!
+module "web_page"
+{
+	#include "functions.dkh"
+	#include "serialize.dkh"
+	#include "dbr.dkh"
+
+	// codeblock "Responder XML"
+	// {
+	// 	@http_context<"response/headers/Content-Type"> : "text/xml; charset=utf-8"
+	// }
+
+	// codeblock "Responder JSON"
+	// {
+	// 	new datos
+	// 	{
+	// 		@"success": @true
+	// 		@"message": "Respondiendo Json"
+	// 	}
+
+	// 	@http_context<"response/headers/Content-Type"> : "application/json; charset=utf-8"
+	// 	@http_context<"response/output"> : "text"
+	// 	@http_context<"response/text"> : to.json(datos)
+	// }
+
+	// codeblock "Responder Archivo"
+	// {
+	// 	@http_context<"response/headers/Content-Type"> : "application/octet-stream"
+	// 	@http_context<"response/headers/Content-Disposition"> : 'attachment; filename="notas.txt"'
+	// 	@http_context<"response/output"> : "binary"
+	// 	@http_context<"response/binary*"> : file.rbytes("learning/resources/notas.txt")
+	// }
+
+	ref db = dbr.open("prueba@localhost")
+	ref usuarios = dbr.list(db,"select * from tuser",@null)
+    
+    ## // #$ - Contexto declarativo
+    html
+	{
+		head
+		{
+			title{"Devkron Web page"}
+		}
+		body
+		{
+			h1{"Devkron"}
+			p{"Página <br> predeterminada."}
+
+			h5{"Lista de usuarios:"}
+			#!
+			for i=0; i<list.count(usuarios)
+			{
+				ref usr = list.obj(usuarios,i)
+				nombre = @@(usr,"$username")
+
+				#$
+				p{"#<nombre>"}
+			}
+			#$
+
+			h5{"Volcado de '@http_context'"}
+			div{"#<to.json(@http_context)>"}
+		}
+	}
+    ## // #! - Contexto imperativo
+
+	do dbr.close(db)
+}

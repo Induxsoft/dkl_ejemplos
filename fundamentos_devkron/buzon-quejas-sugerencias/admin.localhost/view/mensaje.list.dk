@@ -1,0 +1,65 @@
+#include "dkli.dkh"
+#$
+module "mensaje.list.dk"
+{
+    html
+    {
+        head
+        {
+            meta(charset="UTF-8")
+            title{"Mensajes"}
+            link(href="/_resources/css/styles.css" rel="stylesheet")
+        }
+
+        body
+        {
+            h1{"Mensajes"}
+
+            div(class="action-bar")
+            {
+                a(href="/home/"){"Inicio"}
+            }
+
+            table(border="1")
+            {
+                thead
+                {
+                    tr
+                    {
+                        th{"Nombre"}
+                        th{"Correo"}
+                        th{"Mensaje"}
+                        th{"Tipo"}
+                        th{"Atendio"}
+                        th{"Acciones"}
+                    }
+                }
+                tbody
+                {
+                    #!
+                    for i=0; i<list.count(data)
+                    {
+                        ref item = list.obj(data,i)
+                        id, nombre, correo, mensaje, tipo, atendio << item
+
+                        #$
+                        tr
+                        {
+                            td{"#<nombre>"}
+                            td{"#<correo>"}
+                            td{"#<mensaje>"}
+                            td{"#<tipo>"}
+                            td{"#<atendio>"}
+                            td
+                            {
+                                a(href="/mensajes/#<id>/"){ butoon{"Atender"} }
+                            }
+                        }
+                    }
+                    #$
+                    ""
+                }
+            }
+        }
+    }
+}

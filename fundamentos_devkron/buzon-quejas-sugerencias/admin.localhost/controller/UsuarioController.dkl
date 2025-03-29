@@ -1,0 +1,92 @@
+#include "dkli.dkh"
+#!
+module "UsuarioController"
+{
+    ref data = @null
+    new response
+    {
+        @"success": @true
+    }
+
+    method = @@(@http_context,"$request/headers/REQUEST_METHOD")
+    accept = @@(@http_context,"$request/headers/http_accept")
+    view = ""
+    href = ""
+    uid = @@(@_GET,"$id")
+
+    switch method
+    {
+        case "GET"
+        {
+            if uid == "_logout"
+            {
+                do Usuario.logout()
+            }
+            else if uid != ""
+            {
+                view = "usuario.form.dk"
+                ref data:Usuario.read(database,@_GET)
+            }
+            else
+            {
+                view = "usuario.list.dk"
+                ref data:Usuario.list(database,@_GET)
+            }
+            break
+        }
+        case "POST"
+        {
+            href = field.dstr(@_POST,"referrer","/usuarios/")
+
+            if uid == "_login"
+            {
+                do Usuario.login(database,@_POST)
+            }
+            else if uid == "_new"
+            {
+                ref data:Usuario.create(database,@_GET,@_POST)
+            }
+            else
+            {
+                ref data:Usuario.update(database,@_GET,@_POST)
+            }
+            break
+        }
+        case "DELETE"
+        {
+            do Usuario.delete(database,@_GET)
+            break
+        }
+    }
+
+    if @_ids == "" {
+        @http_context<"response/headers/location"> : "/"
+        return
+    }
+
+    response<"data*"> : data
+    exception
+    {
+        using response
+        {
+            @"success": @false
+            @"message": last_error()
+        }
+    }
+
+    if contains(accept,"html") && not(response.success) {
+        include path.concat(@base_path,"view/error.dk")
+    }
+    else if contains(accept,"html") && method == "GET" {
+        include path.concat(@base_path,"view/"+view)
+    }
+    else if contains(accept,"html") && method == "POST" {
+        @http_context<"response/headers/location"> : href
+    }
+    else if contains(accept,"json")
+    {
+        @http_context<"response/headers/Content-Type"> : "application/json; charset=utf-8"
+		@http_context<"response/output"> : "text"
+		@http_context<"response/text"> : to.json(response)
+    }
+}

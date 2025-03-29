@@ -1,0 +1,60 @@
+#include "dkli.dkh"
+#$
+module "usuario.list.dk"
+{
+    html
+    {
+        head
+        {
+            meta(charset="UTF-8")
+            title{"Usuarios"}
+            link(href="/_resources/css/styles.css" rel="stylesheet")
+            script(src="/_resources/js/usuarios.js"){""}
+        }
+
+        body
+        {
+            h1{"Usuarios"}
+
+            div(class="action-bar")
+            {
+                a(href="/home/"){"Inicio"}
+                a(href="/usuarios/_new"){"Crear"}
+            }
+
+            table(border="1")
+            {
+                thead
+                {
+                    tr
+                    {
+                        th{"Nombre"}
+                        th{"Acciones"}
+                    }
+                }
+                tbody
+                {
+                    #!
+                    for i=0; i<list.count(data)
+                    {
+                        ref item = list.obj(data,i)
+                        id, nombre << item
+
+                        #$
+                        tr
+                        {
+                            td{"#<nombre>"}
+                            td
+                            {
+                                a(href="/usuarios/#<id>/"){ butoon{"Editar"} }
+                                button(onclick="eliminar(#<id>)"){"Eliminar"}
+                            }
+                        }
+                    }
+                    #$
+                    ""
+                }
+            }
+        }
+    }
+}

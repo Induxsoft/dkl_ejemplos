@@ -1,0 +1,103 @@
+#include "dkli.dkh"
+#set "meta-xml-declaration" "<!DOCTYPE html>\r\n"
+#$
+module "index"
+{
+    html
+    {
+        head
+        {
+            meta(charset="UTF-8")
+            title{"Buzón"}
+
+            style
+            {$'
+                .fw-bold { font-weight: bold; }
+                
+                form {
+                    width: 320px;
+                    text-align: right;
+                }
+                form div {
+                    margin-bottom: 8px;
+                    text-align: left;
+                }
+                form label { display: block; }
+                form input, form textarea {
+                    width: 100%;
+                    padding: 5px;
+                }
+                .form-check {
+                    display: inline-block;
+                    margin-right: 10px;
+                }
+                .form-check label { display: inline-block; }
+                .form-check input {
+                    float: left;
+                    width: auto;
+                }
+                form button {
+                    padding: 5px;
+                    margin-left: 5px;
+                }
+            '}
+        }
+
+        body
+        {
+            h1{"Quejas y sugerencias"}
+
+            form(action="http://admin.localhost/mensajes/_new/" method="POST")
+            {
+                input(type="hidden" name="referrer" value="http://buzon.localhost/")
+
+                div
+                {
+                    label(class="fw-bold"){"Nombre:"}
+                    input(type="text" name="nombre" maxlength="100" required="")
+                }
+
+                div
+                {
+                    label{"Correo:"}
+                    input(type="text" name="correo" maxlength="80")
+                }
+
+                div
+                {
+                    label{"Teléfono:"}
+                    input(type="text" name="telefono" maxlength="15")
+                }
+
+                div
+                {
+                    label{"Empresa:"}
+                    input(type="text" name="empresa" maxlength="100")
+                }
+
+                div
+                {
+                    label(class="fw-bold"){"Mensaje"}
+                    textarea(name="mensaje" rows="5" required=""){""}
+                }
+
+                div
+                {
+                    div(class="form-check")
+                    {
+                        input(type="radio" name="queja" value="1" id="radio1")
+                        label("for"="radio1"){"Queja"}
+                    }
+                    div(class="form-check")
+                    {
+                        input(type="radio" name="queja" value="0" id="radio0" checked="")
+                        label("for"="radio0"){"Sugerencia"}
+                    }
+                }
+
+                button(type="submit"){"Enviar"}
+                button(type="reset" onclick="window.location.href='/'"){"Cancelar"}
+            }
+        }
+    }
+}

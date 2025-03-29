@@ -1,0 +1,21 @@
+#include "dkli.dkh"
+#set "meta-xml-declaration" "<!DOCTYPE html>\r\n"
+#$
+module "index"
+{
+    html
+    {
+        head
+        {
+            meta(charset="UTF-8")
+            title{"Inicio"}
+        }
+
+        body
+        {
+            h1{"Induxsoft"}
+
+            a(href="/form.dkl"){"¡Compartenos tu opinión!"}
+        }
+    }
+}

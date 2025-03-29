@@ -1,0 +1,162 @@
+#include "dkli.dkh"
+#!
+program "Fundamentos de programación con DevKron"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "dbr.dkh"
+
+    // https://docs.induxsoft.net/es/devkron/Bibliotecas-de-funciones/dbr/dbr.md
+    /**
+    * `qname` => Es una cadena de conexión `aplicacion@grupo`
+    */
+
+    // Crear una conexión cifrada a una base de datos existente.
+    // new cnn
+    // {
+    //     @"Engine": "MY_SQL" //"MY_SQL" | "SQL_SERVER" | "POSTGRE_SQL"
+    //     @"Host": "localhost"
+    //     @"UserName": "root"
+    //     @"Password": "12345"
+    //     @"DefaultSchema": "v12"
+    //     @"Port": 3306
+    //     // @"WindowAuthMode": 0-1 // Solo SQL_SERVER
+    //     // @"NameSpaceSchema": "" // Solo POSTGRE_SQL
+    // }
+    // do dba.createconnection("connection2@MyApp",cnn,@false,"")
+
+    function CrearBD(qn)
+    {
+        if dba.cnnexists(qn) { return }
+
+        ref conexion = split(qn,"@") //Salida: ["conexion","grupo"]
+        bd = list.str(conexion,0)
+        gp = list.str(conexion,1)
+
+        codeblock "Verificar grupo de conexion"
+        {
+            ref grupos = dba.apps("") //Salida: ["grupo1","grupo2",....]
+            crear_grupo = @true
+            for i = 0; i < list.count(grupos)
+            {
+                grupo = list.str(grupos,i)
+                if grupo == gp {
+                    crear_grupo = @false
+                    break
+                }
+            }
+            if crear_grupo { do dba.addapp(gp) }
+        }
+
+        new cnn
+        {
+            @"Engine": "MY_SQL" //"MY_SQL" | "SQL_SERVER" | "POSTGRE_SQL"
+            @"Host": "localhost"
+            @"UserName": "root"
+            @"Password": "12345"
+            @"DefaultSchema": bd
+            @"Port": 3306
+            // @"WindowAuthMode": 0-1 // Solo SQL_SERVER
+            // @"NameSpaceSchema": "" // Solo POSTGRE_SQL
+        }
+        do dba.createdb(qn,cnn)
+        do print(">Base de datos creada: " + bd)
+    }
+
+    conexion = "prueba@localhost"
+
+    do CrearBD(conexion)
+    ref db = dbr.open(conexion)
+
+    if dbr.is_open(db) { do print("La conexión ha sido abierta") }
+    else { do print("La conexión no pudo abrirse") }
+
+    /**
+    * Campos de control
+    *
+    * sys_pk int Clave primaria.
+    * sys_guid string(32) GUID de alcance global.
+    * sys_dtcreated timestamp Fecha y hora de creaión del registro.
+    * sys_timestamp timestamp Fecha y hora de última actualización del registro.
+    * sys_dtexported timestamp Fecha y hora en que se exporto el registro.
+    * sys_info string(32) Propósito general
+    * sys_user string(32) Id usuario que creó el registro.
+    * sys_lastuser string(32) Id del usuario que actualizo el registro.
+    * sys_exported boolean Indica si el registro ha sido exportado.
+    * sys_deleted boolean Indicar si el registro esta eliminado
+    * sys_lock int Contiene la Clave Primaria del registro del que depende su bloqueo
+    * sys_recver int Control de versión del registro.
+    */
+
+    // OBTENER DATOS
+    
+    //Devuelve el resultado de la consulta proporcionada como una lista. []
+    ref usuarios = dbr.list(db,"select username from tuser",@null)
+    do print(to.json(usuarios))
+    
+    //Devuelve el resultado de la consulta proporcionada como un registro. {}
+    new params
+    {
+        @"uid": "erika"
+    }
+    ref usuario = dbr.rec(db,"select * from tuser where userid = @uid",params)
+    do print(to.json(usuario))
+
+    // INSERTAR
+    
+    /* new datos
+    {
+        @"sys_pk": 0
+        @"sys_guid": uuid()
+        @"sys_dtcreated*": dbr.sql("now()") //now()
+        @"sys_timestamp*": dbr.sql("now()")
+        @"sys_dtexported*": dbr.sql("now()")
+        @"sys_info": ""
+        @"sys_user": ""
+        @"sys_lastuser": ""
+        @"sys_exported": @false
+        @"sys_deleted": @false
+        // @"sys_lock": 
+        @"sys_recver": 0
+        
+        @"userid": "erika"
+        @"username": "Erika"
+        @"pwd": "12345"
+    }
+    do dbr.insert(db,"tuser",datos) */
+
+    // ACTUALIZAR
+
+    /* new datos
+    {
+        @"sys_timestamp*": dbr.sql("now()")
+        @"sys_recver*": dbr.sql("ifnull(sys_recver,0) + 1")
+
+        @"pwd": md5("12345")
+        @"notes": "Usuario actualizado"
+    }
+    do dbr.update(db,"tuser",datos,"userid = @uid",params) */
+
+    // ELIMINAR
+
+    // do dbr.delete(db,"tuser","userid = @uid",params)
+
+    // TRANSACCIONES
+
+    do dbr.begin(db)
+
+    do dbr.delete(db,"tuser","userid = @uid",params)
+    // do rise_error(500,"No fue posible completar el proceso")
+
+    do dbr.commit(db)
+
+    do dbr.close(db)
+
+    exception
+    {
+        if dbr.in_transaction(db) { do dbr.rollback(db) }
+        do dbr.close(db)
+
+        do print(last_error())
+    }
+}
