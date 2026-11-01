@@ -1,0 +1,21 @@
+// probar: parse
+// Propósito: webcl.dkh, el cliente HTTP clásico (se conserva igual en 2.0).
+// http.get devuelve el texto de la respuesta; http.post envía un registro como formulario.
+#include "dkli.dkh"
+#!
+program "webcl"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "webcl.dkh"
+
+    html = http.get("https://example.com/")
+    do print("bytes recibidos: " + str(length(html)))
+
+    new campos
+    {
+        @"usuario": "demo"
+    }
+    respuesta = http.post("https://example.com/formulario", campos)
+    do print(respuesta)
+}

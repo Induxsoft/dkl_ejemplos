@@ -1,0 +1,27 @@
+// Propósito: funciones list.* de 2.0: índices negativos, of, slice, merge, copy, join, split, indexstr, type.
+#include "dkli.dkh"
+#!
+program "list-2"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    ref l = list.of("a", "b", "c", "d")
+    do print("of: " + to.json(l) + "  atstr(-1)=" + list.atstr(l, -1) + " atstr(-2)=" + list.atstr(l, -2))
+    do list.insstr(l, 0, "inicio")
+    do list.insnum(l, -1, 99)
+    do print("insertar al inicio y al final: " + to.json(l))
+    do list.setstr(l, -1, "fin")
+    do print("reemplazar el último: " + to.json(l))
+    do print("slice(l, 1, 2): " + to.json(list.slice(l, 1, 2)) + "  slice(l, -2, 9): " + to.json(list.slice(l, -2, 9)))
+    ref otra = list.of(1, 2)
+    do list.merge(otra, l)
+    do print("merge: " + to.json(otra))
+    ref copia = list.copy(otra)
+    do list.clear(otra)
+    do print("copy sobrevive al clear del original: " + str(list.count(copia)))
+    do print("join: " + list.join(list.of("x", 1.5, "z"), " | "))
+    ref partes = list.split("2026-11-01", "-")
+    do print("split: " + to.json(partes) + "  indexstr(\"11\")=" + str(list.indexstr(partes, "11")) + "  indexstr(\"99\")=" + str(list.indexstr(partes, "99")))
+    do print("type (1 cadena, 2 número): " + str(list.type(copia, 0)) + " " + str(list.type(copia, 2)))
+}

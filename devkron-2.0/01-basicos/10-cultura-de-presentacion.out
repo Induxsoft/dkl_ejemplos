@@ -1,0 +1,4 @@
+str():    1234.5
+format(): 1.234,50
+fecha:    domingo 1 de noviembre de 2026
+val() de lo formateado: 0   <- por eso no se formatea y se vuelve a leer

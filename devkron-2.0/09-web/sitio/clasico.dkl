@@ -1,0 +1,22 @@
+// probar: parse
+// Propósito: la forma clásica (sin http.dkh), escribiendo directamente en @http_context.
+// - request/get: parámetros de la URL (y los de routes.map); request/post_string: cuerpo crudo (JSON).
+// - response/http_status, response/headers/..., response/output ("text", "binary" o "standard") y response/text.
+#include "dkli.dkh"
+#!
+program "clasico"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    id = @@(@http_context, "#request/get/id")
+    new r
+    {
+        @"id": id
+        @"ok": id > 0
+    }
+    if id <= 0 { @http_context<"response/http_status">: 404 }
+    @http_context<"response/headers/content-type">: "application/json;charset=utf-8"
+    @http_context<"response/output">: "text"
+    @http_context<"response/text">: to.json(r)
+}

@@ -1,0 +1,4 @@
+a: <resultado >suma(1..10)=55</resultado>
+b: <resultado >suma(1..100)=5050</resultado>
+error de b: []
+pool: ["<resultado >suma(1..1)=1</resultado>","<resultado >suma(1..2)=3</resultado>","<resultado >suma(1..3)=6</resultado>","<resultado >suma(1..4)=10</resultado>"]

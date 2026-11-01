@@ -1,0 +1,7 @@
+anexar: [1,"dos",{"k":3}]
+con expresiones: [1,"dos",{"k":3},1,2,"10"]
+sacar dos: 1 y dos
+sacar uno: 1
+el tercero es un registro: {"k":3}
+a -> b con dos listas: [[]]   <- anexó la lista como elemento
+faltan elementos: {1} La lista 'corta' tiene 1 elemento(s) y se indicaron 2 variables [03-flechas.dkl][Ln= 35]

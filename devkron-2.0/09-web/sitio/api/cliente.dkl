@@ -1,0 +1,29 @@
+// probar: parse
+// Propósito: servicio JSON con http.dkh (httpreq.* para leer la petición, httpres.* para responder).
+// URL de ejemplo: GET /api/cliente.dkl?id=5   (o /api/clientes/5 con la regla de _protected/routes.map)
+// Respuestas con el formato {success, data} / {success:false, message}.
+// httpres.ok y httpres.fail fijan HTTP 200: para otro código, llame httpres.status DESPUÉS.
+// No se ejecuta en consola: necesita el servidor (FastCGI). Vea ../../probar-servicio.dkl para simularlo.
+#include "dkli.dkh"
+#!
+program "api-cliente"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "http.dkh"
+
+    id = httpreq.num("id")
+    if id <= 0
+    {
+        do httpres.fail("Falta el id")
+        do httpres.status(400)
+        return
+    }
+    new cliente
+    {
+        @"id": id
+        @"nombre": "Cliente " + str(id)
+        @"metodo": httpreq.method()
+    }
+    do httpres.ok(cliente)
+}

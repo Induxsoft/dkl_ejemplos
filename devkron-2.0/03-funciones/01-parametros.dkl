@@ -1,0 +1,51 @@
+// Propósito: declarar funciones, parámetros por valor y parámetros de objeto (&).
+// - Forma: nombre::param1, param2 { ... }   (o "function nombre(a, b) { }").
+// - Se declaran ANTES del código que las llama.
+// - Los números y cadenas se pasan por valor (copia).
+// - Los parámetros con & reciben un objeto (registro, lista): la función trabaja sobre el mismo objeto.
+// - El número de parámetros es fijo.
+#include "dkli.dkh"
+#!
+program "parametros"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    duplica::n
+    {
+        n = n * 2
+        return n
+    }
+
+    marca_pagado::&pedido, fecha
+    {
+        pedido<"pagado">: 1
+        pedido<"fecha_pago">: fecha
+    }
+
+    agrega::&lista, valor
+    {
+        valor -> lista
+    }
+
+    function area(base, altura)
+    {
+        return base * altura / 2
+    }
+
+    x = 5
+    do print("duplica(x) = " + str(duplica(x)) + ", x sigue en " + str(x))
+
+    new pedido
+    {
+        @"folio": "A-1"
+    }
+    do marca_pagado(pedido, 20261101)
+    do print("registro modificado por la función: " + to.json(pedido))
+
+    ref l = list.create()
+    do agrega(l, "uno")
+    do agrega(l, 2)
+    do print("lista modificada por la función: " + to.json(l))
+    do print("sintaxis function: " + str(area(10, 4)))
+}

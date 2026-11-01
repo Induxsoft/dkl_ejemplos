@@ -1,0 +1,2 @@
+sin ftext: Hola #<cliente>, su pedido #<padleft(str(folio), 5, "0")> suma #<total:$ #,##0.00> (IVA: #<total * 0.16:0.00>).
+con ftext: Hola Ana, su pedido 00007 suma $ 1,234.50 (IVA: 197.52).

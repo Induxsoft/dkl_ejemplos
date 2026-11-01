@@ -1,0 +1,33 @@
+// Propósito: por qué [Ln= n] no siempre es la línea real.
+// En archivos con saltos LF (Linux), el motor pierde líneas en blanco (1 de cada 2 seguidas) y no cuenta
+// las líneas internas de los comentarios /* ... */. Las sentencias con bloque (if, funciones) reportan
+// la línea de su llave de cierre. Con saltos CRLF las sentencias simples salen exactas.
+// Cada mensaje de abajo dice la línea real; el motor reporta otra en [Ln= n].
+// Para saber la línea exacta use "dkl-debug --check" o el depurador (calculan la posición real).
+
+
+/*
+   Comentario de bloque de tres líneas
+*/
+#include "dkli.dkh"
+#!
+program "lineas"
+{
+    #include "functions.dkh"
+
+    do rise_error(1, "línea real 18")
+    exception
+    {
+        do print(last_error())
+        do clear_exceptions()
+    }
+
+
+
+    do rise_error(2, "línea real 27, después de tres líneas en blanco")
+    exception
+    {
+        do print(last_error())
+        do clear_exceptions()
+    }
+}

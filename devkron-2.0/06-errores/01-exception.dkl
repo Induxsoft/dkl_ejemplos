@@ -1,0 +1,26 @@
+// Propósito: atrapar errores con un bloque exception.
+// - El bloque exception va DESPUÉS del código que protege, en el mismo bloque.
+// - Si ocurre un error, se salta el resto hasta el exception más cercano; después la ejecución sigue.
+// - last_error() da el mensaje "{código} texto [archivo][Ln= n]"; last_error_code() el código.
+// - clear_exceptions() limpia la pila de errores (hágalo después de atender el error).
+#include "dkli.dkh"
+#!
+program "exception"
+{
+    #include "functions.dkh"
+
+    divide::a, b
+    {
+        return a / b
+    }
+
+    do print("inicio")
+    x = divide(10, 0)
+    do print("esto se salta")
+    exception
+    {
+        do print("código " + str(last_error_code()) + ": " + last_error())
+        do clear_exceptions()
+    }
+    do print("el programa sigue")
+}

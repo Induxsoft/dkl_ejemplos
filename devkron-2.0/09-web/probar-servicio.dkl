@@ -1,0 +1,39 @@
+// Propósito: probar un servicio web en consola, sin servidor.
+// Se arma a mano un @http_context con la petición, se ejecuta el servicio con la sentencia include
+// (que corre el archivo en ese momento) y se revisa la respuesta que dejó en @http_context.
+// Así se pueden escribir pruebas automáticas de los servicios.
+// Dos detalles del include en ejecución:
+// - El archivo corre en el ámbito de quien lo incluye: si el servicio usa una variable con el mismo
+//   nombre y otro tipo, falla. Por eso se incluye dentro de una función aparte (ejecutar).
+// - Un return del servicio sale de esa función (como si el código estuviera escrito ahí).
+#include "dkli.dkh"
+#!
+program "probar-servicio"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    // include acepta una expresión con la ruta
+    ejecutar::archivo
+    {
+        include archivo
+        return 1
+    }
+
+    llamar::archivo, metodo, valor_id, cuerpo
+    {
+        ref @http_context = from.json('{"request":{"get":{},"post":{},"headers":{},"cookies":{}},"response":{"headers":{}}}')
+        @http_context<"request/get/id">: valor_id
+        @http_context<"request/headers/REQUEST_METHOD">: metodo
+        @http_context<"request/POST_STRING">: cuerpo
+        terminado = ejecutar(archivo)
+        estado = @@(@http_context, "#response/http_status")
+        return metodo + " " + archivo + " -> HTTP " + ifstr(estado == 0, "200", str(estado)) + " " + @@(@http_context, "response/text") + ifstr(terminado, "", "  (salió con return)")
+    }
+
+    do print(llamar("sitio/api/cliente.dkl", "GET", "5", ""))
+    do print(llamar("sitio/api/cliente.dkl", "GET", "0", ""))
+    do print(llamar("sitio/api/pedido.dkl", "GET", "", ""))
+    do print(llamar("sitio/api/pedido.dkl", "POST", "", '{"cliente":"Ana","partidas":[{"cant":2,"precio":10.5},{"cant":1,"precio":4}]}'))
+    do print(llamar("sitio/api/pedido.dkl", "POST", "", '{"partidas":[]}'))
+}

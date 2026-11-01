@@ -1,0 +1,2 @@
+error: {1} Error en expresión: Attempted to divide by zero. [02-error-dentro-de-una-expresion.dkl][Ln= 12]
+pero 'total' quedó en 1   <- 0 + 1

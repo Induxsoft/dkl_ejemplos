@@ -1,0 +1,10 @@
+[Devkron 2.0] longitud 11
+DEVKRON 2.0 / devkron 2.0
+substring(t, 0, 7) = Devkron
+cut(t, 3) = Dev ; right(t, 3) = 2.0
+left(t, 3) = kron 2.0   <- desde la posición 3, no los primeros 3
+replace: Devkron LTS
+padleft: 000042 padright: [ab...]
+findstr (base 0, -1 si no está): 3 -1
+split: ["uno","dos","","tres"]
+comillas y escapes: "doble" 'simple' tab[	]

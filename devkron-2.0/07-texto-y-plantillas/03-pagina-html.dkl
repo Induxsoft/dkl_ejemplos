@@ -1,0 +1,35 @@
+// Propósito: generar HTML con el contexto declarativo y un ciclo imperativo dentro.
+// - meta-xml-declaration pone el <!DOCTYPE html> antes del nodo raíz.
+// - Dentro del árbol se alterna con ## (conmutar) o #! / #$ para mezclar sentencias y elementos.
+// - El texto $"..." no se escapa (lo habitual al generar HTML); "..." sí se escapa.
+// En el servidor web este mismo archivo sería una página; aquí se ve la salida en consola.
+#include "dkli.dkh"
+#set "meta-xml-declaration" "<!DOCTYPE html>\r\n"
+html
+{
+    ##
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    ref productos = from.json('[{"n":"Café","p":35},{"n":"Té <verde>","p":28.5}]')
+    titulo = "Lista de precios"
+    ##
+    head { title{ $"#<titulo>" } }
+    body
+    {
+        h1{ $"#<titulo>" }
+        ul
+        {
+            #!
+            for i=0; i<list.count(productos)
+            {
+                ref p = list.obj(productos, i)
+                nombre = @@(p, "n")
+                precio = @@(p, "#p")
+                #$
+                li(class="producto"){ "#<nombre>: #<precio:0.00>" }
+                #!
+            }
+            #$
+        }
+    }
+}

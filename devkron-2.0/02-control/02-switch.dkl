@@ -1,0 +1,65 @@
+// Propósito: switch / case / default, tal como se comporta el motor.
+// - Cada case se COMPARA en orden. Sin break, el switch sigue comparando los case siguientes
+//   (no "cae" al cuerpo del siguiente como en C): solo se ejecutan los case que coinciden.
+// - break termina el switch.
+// - default se ejecuta si ningún case anterior a él coincidió (póngalo al final).
+// - El valor del case debe ser del mismo tipo que el del switch ("1" contra 1 es "Tipos no coinciden").
+#include "dkli.dkh"
+#!
+program "switch"
+{
+    #include "functions.dkh"
+
+    nombre_dia::d
+    {
+        r = ""
+        switch d
+        {
+            case 0
+            {
+                r = "domingo"
+                break
+            }
+            case 6
+            {
+                r = "sábado"
+                break
+            }
+            default { r = "entre semana" }
+        }
+        return r
+    }
+    do print(nombre_dia(0) + " / " + nombre_dia(6) + " / " + nombre_dia(3))
+
+    // Sin break: se ejecuta cada case que coincide, no el cuerpo del siguiente.
+    nivel = 1
+    switch nivel
+    {
+        case 1 { do print("case 1: coincide") }
+        case 2 { do print("case 2: no se ejecuta, aunque el case 1 no tenga break") }
+        case 1 { do print("otro case 1: también coincide") }
+        default { do print("default: no se ejecuta porque ya hubo coincidencia") }
+    }
+
+    moneda = "USD"
+    switch moneda
+    {
+        case "MXN" { do print("pesos") }
+        case "USD"
+        {
+            do print("dólares")
+            break
+        }
+        default { do print("otra moneda") }
+    }
+
+    switch nivel
+    {
+        case "1" { do print("no llega") }
+    }
+    exception
+    {
+        do print("tipos distintos: " + last_error())
+        do clear_exceptions()
+    }
+}

@@ -1,0 +1,4 @@
+select id, nombrefrom #<tabla>where activo = 1
+select id, nombrefrom clienteswhere activo = 1
+select id, nombrefrom clientes where activo = 1   <- el espacio inicial también se pierde
+select id, nombre from clientes where activo = 1

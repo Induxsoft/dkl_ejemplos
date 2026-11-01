@@ -1,0 +1,4 @@
+sin return devuelve 0
+mes 2: febrero
+error esperado: {1} Error en expresión: Tipos no coinciden [02-retorno.dkl][Ln= 33]
+objeto devuelto: {"nombre":"Ana","activo":1}

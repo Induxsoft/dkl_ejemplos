@@ -1,0 +1,34 @@
+// Propósito: filter, map, reduce y pluck sin funciones nuevas: foreach + flechas + variables de quien llama.
+// - El bloque del go modifica las variables de quien llama, así que acumula ahí.
+// - El alias (v, c) no se usa directo con la flecha: se copia antes a una variable local.
+#include "dkli.dkh"
+#!
+program "filter-map-reduce"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    ref nums = from.json('[3, 8, 1, 12]')
+    umbral = 5
+    total = 0
+    go foreach.lnum(value:v) with(nums)
+    {
+        x = v
+        if x > umbral { x -> grandes }
+        x * 2 -> dobles
+        total = total + x
+    }
+    do print("filter > 5: " + to.json(grandes))
+    do print("map * 2:    " + to.json(dobles))
+    do print("reduce suma: " + str(total))
+
+    ref clientes = from.json('[{"n":"Ana","saldo":0},{"n":"Luis","saldo":500},{"n":"Eva","saldo":20}]')
+    go foreach.lobj(value:c) with(clientes)
+    {
+        ref o = c
+        if o.saldo > 0 { o -> morosos }
+        o.n -> nombres
+    }
+    do print("filter de registros: " + to.json(morosos))
+    do print("pluck de nombres: " + to.json(nombres))
+}

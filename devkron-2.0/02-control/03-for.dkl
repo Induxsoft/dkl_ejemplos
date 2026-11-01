@@ -1,0 +1,44 @@
+// Propósito: el ciclo for.
+// - Forma: for variable = inicio; condición; incremento   (sin paréntesis ni punto y coma final).
+// - Si el incremento es de uno en uno, se omite.
+// - Si es otro, se escribe SOLO la expresión: i+2, i-1 (NO i=i+2: da "Operador inválido").
+// - Al terminar, la variable conserva su último valor.
+#include "dkli.dkh"
+#!
+program "for"
+{
+    #include "functions.dkh"
+
+    s = ""
+    for i=0; i<5
+    {
+        s = s + str(i) + " "
+    }
+    do print("de uno en uno: " + s + "| al salir i=" + str(i))
+
+    s = ""
+    for j=0; j<10; j+3
+    {
+        s = s + str(j) + " "
+    }
+    do print("de tres en tres: " + s)
+
+    s = ""
+    for k=5; k>0; k-1
+    {
+        s = s + str(k) + " "
+    }
+    do print("descendente: " + s)
+
+    // Ciclos anidados y break (sale solo del ciclo más cercano)
+    for a=1; a<=3
+    {
+        fila = ""
+        for b=1; b<=3
+        {
+            if b > a { break }
+            fila = fila + str(a * b) + " "
+        }
+        do print("fila " + str(a) + ": " + fila)
+    }
+}

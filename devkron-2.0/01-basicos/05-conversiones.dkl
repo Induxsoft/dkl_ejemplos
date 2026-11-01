@@ -1,0 +1,17 @@
+// Propósito: convertir entre número y cadena.
+// - str(n) y val(s) usan siempre punto decimal (cultura invariante), sin importar el servidor.
+// - val() de algo que no es número da 0.
+// - Para MOSTRAR con separadores o moneda se usa format() (ver 07-format-y-cultura.dkl).
+#include "dkli.dkh"
+#!
+program "conversiones"
+{
+    #include "functions.dkh"
+
+    precio = val("1234.5")
+    do print(str(precio * 2))
+    do print(str(val("abc")))
+    do print("Total: " + str(round(precio * 1.16, 2)))
+    folio = 7
+    do print("F-" + padleft(str(folio), 5, "0"))
+}

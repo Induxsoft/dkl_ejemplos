@@ -1,0 +1,37 @@
+// Propósito: pasar variables a un registro (>>) y campos a variables (<<).
+// - a, b >> r   cada variable se vuelve un campo de r.
+// - a, b << r   declara o asigna variables desde los campos (una referencia también sale bien en 2.0).
+// - using o { ... } + total << o  es una forma corta de trabajar campos de un objeto de una lista.
+#include "dkli.dkh"
+#!
+program "estructurar"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    nombre = "Juan"
+    edad = 28
+    nombre, edad >> persona
+    do print(to.json(persona))
+
+    new p
+    {
+        @"cliente": "Eva"
+        @"total": 250
+        new member @"envio"
+        {
+            @"ciudad": "Tuxtla"
+        }
+    }
+    cliente, total, envio << p
+    do print(cliente + " debe " + str(total) + " y se envía a " + @@(envio, "ciudad"))
+
+    ref pedidos = from.json('[{"total":100},{"total":50}]')
+    o <- pedidos
+    using o
+    {
+        total := @@(o, "#total") * 1.16
+    }
+    total << o
+    do print("primer pedido con IVA: " + str(total) + " -> " + to.json(pedidos))
+}

@@ -1,0 +1,20 @@
+// Propósito: capturar en una cadena la salida declarativa con fxml().
+// - fxml() devuelve lo que el elemento declarativo que la contiene ha producido hasta ese momento,
+//   y lo QUITA de la salida (por eso <tarjeta> no aparece en el XML final).
+// - Debe llamarse dentro de un elemento declarativo (aquí "correo"); dentro de program devuelve "".
+// Sirve para armar fragmentos XML/HTML y guardarlos, enviarlos por correo o incrustarlos.
+#include "dkli.dkh"
+correo
+{
+    ##
+    #include "functions.dkh"
+    nombre = "Ana"
+    ##
+    tarjeta(nombre="#<nombre>"){ $"Bienvenida" }
+    #!
+    s = fxml()
+    do print("capturado: " + s)
+    do print("longitud: " + str(length(s)))
+    #$
+    pie{ $"fin" }
+}

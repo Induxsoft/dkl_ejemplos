@@ -1,0 +1,39 @@
+// Propósito: find, findindex y any con salida anticipada.
+// return dentro del bloque de un go sale de la función que contiene el go: por eso van en funciones.
+#include "dkli.dkh"
+#!
+program "find"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    ref ventas = from.json('[{"cliente":"Ana","total":100},{"cliente":"Luis","total":50},{"cliente":"Eva","total":70}]')
+
+    // findindex: índice del primer elemento que cumple, -1 si ninguno
+    primer_mayor::&lista, minimo
+    {
+        go foreach.lobj(index:i, value:x) with(lista)
+        {
+            ref o = x
+            if o.total > minimo { return i }
+        }
+        return -1
+    }
+
+    // any: ¿hay alguno?
+    hay_cliente::&lista, nombre
+    {
+        go foreach.lobj(value:x) with(lista)
+        {
+            ref o = x
+            if o.cliente == nombre { return 1 }
+        }
+        return 0
+    }
+
+    i = primer_mayor(ventas, 60)
+    ref p = list.obj(ventas, i)
+    do print("findindex(total > 60) = " + str(i) + ", find = " + to.json(p))
+    do print("findindex(total > 500) = " + str(primer_mayor(ventas, 500)))
+    do print("any Eva = " + str(hay_cliente(ventas, "Eva")) + ", any Zoe = " + str(hay_cliente(ventas, "Zoe")))
+}

@@ -1,0 +1,31 @@
+// Propósito: la sentencia text concatena varias cadenas en una variable (textos largos, SQL).
+// - Las marcas #<...> NO se evalúan solas: pase el resultado por ftext().
+// - Ojo: cada cadena se RECORTA (se quitan los espacios del inicio y del final) antes de unirla,
+//   así que "select x " + "from t" queda "select xfrom t". Ponga el espacio en medio de una
+//   cadena o use concatenación normal.
+#include "dkli.dkh"
+#!
+program "text"
+{
+    #include "functions.dkh"
+
+    tabla = "clientes"
+    text sql
+    {
+        "select id, nombre "
+        "from #<tabla> "
+        "where activo = 1"
+    }
+    do print(sql)
+    do print(ftext(sql))
+
+    text sql2
+    {
+        "select id, nombre"
+        " from #<tabla> where activo = 1"
+    }
+    do print(ftext(sql2) + "   <- el espacio inicial también se pierde")
+
+    sql3 = "select id, nombre " + "from " + tabla + " where activo = 1"
+    do print(sql3)
+}

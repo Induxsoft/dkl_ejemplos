@@ -1,0 +1,47 @@
+// probar: parse
+// Propósito: consumir una API JSON con http.dkh.
+// - http.get_json / http.post_json / http.call devuelven el JSON de la respuesta como registro.
+// - Un 404 o 500 NO lanza error: revise http.status(). Sí lanzan error la falta de red, el tiempo
+//   agotado y una respuesta que no es JSON.
+// - El encabezado especial "__timeout" fija el tiempo máximo en milisegundos.
+// Necesita red: aquí solo se valida con -parse. Para probarlo: dkl 01-consumir-api-json.dkl
+#include "dkli.dkh"
+#!
+program "cliente-json"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "http.dkh"
+
+    base = "https://api.example.com"
+    token = "TOKEN-DE-EJEMPLO"
+
+    ref h = http.bearer(token)
+    h<"X-Empresa">: "demo"
+    h<"__timeout">: 15000
+
+    ref clientes = http.get_json(base + "/clientes?activos=1", h)
+    if http.status() != 200
+    {
+        do print("la API respondió " + str(http.status()))
+        return
+    }
+    do print("clientes: " + to.json(clientes))
+
+    new pedido
+    {$$
+        "cliente": "C-01",
+        "partidas": [{"sku": "A1", "cant": 2}]
+    $$}
+    ref res = http.post_json(base + "/pedidos", h, pedido)
+    do print(str(http.status()) + " " + to.json(res))
+
+    ref borrado = http.call("DELETE", base + "/pedidos/15", h, @null)
+    ref enc = http.response_headers()
+    do print("Retry-After: " + field.dstr(enc, "Retry-After", "(no vino)"))
+    exception
+    {
+        do print("sin conexión o respuesta inválida: " + last_error())
+        do clear_exceptions()
+    }
+}

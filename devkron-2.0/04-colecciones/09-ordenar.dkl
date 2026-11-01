@@ -1,0 +1,22 @@
+// Propósito: ordenar con listx.dkh (ordenan EN SU LUGAR y devuelven la misma lista).
+// - list.sort: números primero, luego cadenas en orden ordinal (mayúsculas antes), objetos y nulos al final.
+// - list.sort_by(lista, campo, desc): por un campo (admite rutas a/b); estable.
+// - list.reverse invierte.
+#include "dkli.dkh"
+#!
+program "ordenar"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "listx.dkh"
+
+    ref l = list.of("b", 10, "B", 2.5, "a")
+    do print("sort: " + to.json(list.sort(l)))
+
+    ref ventas = from.json('[{"cliente":"Ana","total":100},{"cliente":"Luis","total":50},{"cliente":"Eva","total":100},{"cliente":"Beto","total":70}]')
+    do list.sort_by(ventas, "total", @true)
+    do print("sort_by total desc (estable): " + to.json(ventas))
+    do list.sort_by(ventas, "cliente", @false)
+    do print("sort_by cliente: " + to.json(ventas))
+    do print("reverse: " + to.json(list.reverse(list.of(1, 2, 3))))
+}

@@ -1,0 +1,6 @@
+1) antes de ejecutar la padre: {1} Error en expresión: Función: hijo no reconocida o no registrada [06-funciones-anidadas.dkl][Ln= 26]
+padre(5) = 6
+2) ahora hijo(10) existe afuera: 11
+3) no ve las variables de la padre: {1} Variable 'local_de_padre' no definida en el contexto actual. [06-funciones-anidadas.dkl][Ln= 22]
+aux de a / aux de b / aux() ahora es: aux de b   <- 4) gana la última
+ayuda de c / ayuda de d / c_int.ayuda() sigue siendo: ayuda de c

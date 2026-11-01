@@ -1,0 +1,22 @@
+// Propósito: partes de una URL, parámetros y codificación (url.dkh).
+// url.encode es codificación de componente (%20). No confundir con url_encode de functions.dkh (base64).
+#include "dkli.dkh"
+#!
+program "url"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "url.dkh"
+
+    u = "https://tienda.example.com:8443/api/productos?cat=ropa&q=ni%C3%B1o"
+    do print(url.scheme(u) + " | " + url.host(u) + " | " + str(url.port(u)) + " | " + url.path(u))
+    ref q = url.query(u)
+    do print("q = " + @@(q, "q"))
+    new p
+    {
+        @"pagina": 2
+        @"q": "café con leche"
+    }
+    do print(url.with_query("https://h/buscar", p))
+    do print(url.absolute("https://h/a/b/c", "../d"))
+}

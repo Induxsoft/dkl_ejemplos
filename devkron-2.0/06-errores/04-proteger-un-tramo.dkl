@@ -1,0 +1,26 @@
+// Propósito: proteger solo un tramo de código.
+// El exception atiende el error del bloque en el que está. Para aislar un tramo dentro de un
+// programa o función, envuélvalo en un codeblock con su propio exception.
+#include "dkli.dkh"
+#!
+program "tramo"
+{
+    #include "functions.dkh"
+
+    total = 0
+    ref valores = list.of("10", "x", "30")
+    for i=0; i<list.count(valores)
+    {
+        codeblock
+        {
+            n = list.num(valores, i)
+            total = total + n
+            exception
+            {
+                do print("valor " + str(i) + " ignorado: " + last_error())
+                do clear_exceptions()
+            }
+        }
+    }
+    do print("total = " + str(total))
+}

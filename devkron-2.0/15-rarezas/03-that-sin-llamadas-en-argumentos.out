@@ -1,0 +1,3 @@
+con una llamada en el argumento: {1} Error en expresión: Función: thatf no reconocida o no registrada [03-that-sin-llamadas-en-argumentos.dkl][Ln= 16]
+con variable: 8
+una expresión sin llamadas sí funciona: 12

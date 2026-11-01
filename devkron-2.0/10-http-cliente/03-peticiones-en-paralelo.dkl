@@ -1,0 +1,24 @@
+// probar: parse
+// Propósito: lanzar varias peticiones a la vez con http.parallel(lista, máximo_simultáneas).
+// Cada registro de la lista recibe status, response, success y error.
+#include "dkli.dkh"
+#!
+program "paralelo"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "http.dkh"
+
+    ref peticiones = list.create()
+    for i=1; i<=5
+    {
+        using peticiones {$$ [{"url": "https://api.example.com/productos/" + str(i), "method": "GET"}] $$}
+    }
+    exitosas = http.parallel(peticiones, 3)
+    do print(str(exitosas) + " de " + str(list.count(peticiones)) + " respondieron 2xx")
+    go foreach.lobj(value:p) with(peticiones)
+    {
+        ref x = p
+        do print(x.url + " -> " + str(x.status))
+    }
+}

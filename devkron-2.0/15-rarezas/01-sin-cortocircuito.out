@@ -1,0 +1,6 @@
+0 && marca():
+  se evaluó marca()
+1 || marca():
+  se evaluó marca()
+  sí entra
+con if anidados no se toca la referencia nula

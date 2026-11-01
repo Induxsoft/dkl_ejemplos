@@ -1,0 +1,26 @@
+// Propósito: acceso con punto en expresiones (2.0) y asignación con morsa fuera del bloque.
+// - o.campo y o.a.b se leen en cualquier expresión, también en if.
+// - o.campo := valor escribe (o.hijo := ref objeto para guardar un objeto).
+#include "dkli.dkh"
+#!
+program "punto"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    ref o = from.json('{"total":100,"cliente":{"nombre":"Ana","limite":500}}')
+    iva = 16
+    o.total := o.total + iva
+    if o.total > 110 && o.cliente.limite >= o.total
+    {
+        do print("cliente " + o.cliente.nombre + " puede comprar " + str(o.total))
+    }
+    o.cliente.nombre := "Ana López"
+    o.estado := "abierto"
+    new envio
+    {
+        @"ciudad": "Tuxtla"
+    }
+    o.envio := ref envio
+    do print(to.json(o))
+}

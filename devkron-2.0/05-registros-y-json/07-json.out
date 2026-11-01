@@ -1,0 +1,5 @@
+Cliente: José / cliente: []   <- distingue mayúsculas
+activo como número: 1
+precio: 10.50
+de regreso: {"Cliente":"Jos\u00E9","activo":true,"partidas":[{"sku":"A1","precio":10.50}]}
+lista: 3 elementos, tipo del 3o: 0

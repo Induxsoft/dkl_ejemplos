@@ -1,0 +1,35 @@
+// Propósito: crear, llenar, leer y recorrer una lista.
+// - Las listas son objetos: van en variables ref. Índice base 0.
+// - list.add solo sirve para OBJETOS. Para valores use list.addstr / list.addnum o la flecha.
+//   (list.add(l, "3") inserta el objeto con índice 3, no la cadena "3").
+// - Lectura tipada: list.str, list.num, list.obj (o list.atstr/atnum/atobj, que aceptan índices negativos).
+#include "dkli.dkh"
+#!
+program "listas"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    ref frutas = list.create()
+    do list.addstr(frutas, "manzana")
+    do list.addstr(frutas, "pera")
+    // "uva" -> frutas sería error de sintaxis: una sentencia no puede empezar con una cadena.
+    f = "uva"
+    f -> frutas
+    do print(to.json(frutas) + " tiene " + str(list.count(frutas)) + " elementos")
+    do print("primero: " + list.str(frutas, 0) + ", último: " + list.atstr(frutas, -1))
+
+    for i=0; i<list.count(frutas)
+    {
+        do print(str(i) + ") " + list.str(frutas, i))
+    }
+
+    ref malo = list.create()
+    do list.add(malo, "3")
+    do print("list.add con una cadena numérica: " + to.json(malo) + "   <- un objeto, no \"3\"")
+
+    do list.remove(frutas, 0)
+    do print("tras quitar el primero: " + to.json(frutas))
+    do list.clear(frutas)
+    do print("vacía: " + str(list.count(frutas)))
+}

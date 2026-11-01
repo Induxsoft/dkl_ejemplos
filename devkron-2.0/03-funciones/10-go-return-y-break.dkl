@@ -1,0 +1,47 @@
+// Propósito: return y break dentro del bloque de un go.
+// - return dentro del bloque SALE DE LA FUNCIÓN QUE CONTIENE EL go (con ese valor),
+//   no solo del bloque. Así se escriben find/any con salida anticipada.
+// - break dentro del bloque rompe el ciclo de QUIEN LLAMA (el que rodea al go).
+// - En el nivel principal (fuera de toda función), return o break en el bloque terminan
+//   el programa sin aviso: por eso estas recetas van dentro de funciones (ver 11-go-en-nivel-principal.dkl).
+// - Ojo: with( ) no admite llamadas a funciones (with(list.of(1,2)) es error de sintaxis 109):
+//   pase variables.
+#include "dkli.dkh"
+#!
+program "go-return-break"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    // Busca el primer múltiplo de "m" en la lista; -1 si no hay.
+    primer_multiplo::&lista, m
+    {
+        go foreach.lnum(index:i, value:v) with(lista)
+        {
+            x = v
+            if mod(x, m) == 0 { return x }
+        }
+        return -1
+    }
+
+    ref nums = list.of(7, 11, 12, 15, 18)
+    do print("primer múltiplo de 3: " + str(primer_multiplo(nums, 3)))
+    do print("primer múltiplo de 100: " + str(primer_multiplo(nums, 100)))
+
+    // break en el bloque rompe el for de afuera
+    pruebas::
+    {
+        salida = ""
+        ref tres = list.of(1, 2, 3)
+        for k=0; k<3
+        {
+            go foreach.lnum(index:i, value:v) with(tres)
+            {
+                salida = salida + str(k) + ":" + str(v) + " "
+                if k == 1 && v == 2 { break }
+            }
+        }
+        return salida + "| k al salir = " + str(k)
+    }
+    do print(pruebas())
+}

@@ -1,0 +1,3 @@
+findindex(total > 60) = 0, find = {"cliente":"Ana","total":100}
+findindex(total > 500) = -1
+any Eva = 1, any Zoe = 0

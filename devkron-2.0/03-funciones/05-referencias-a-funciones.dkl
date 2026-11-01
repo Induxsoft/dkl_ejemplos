@@ -1,0 +1,62 @@
+// Propósito: referencias a funciones con point ... to y llamadas con that.
+// - point v to funcion  guarda la referencia.
+// - that v(args) -> r   la llama y guarda el resultado.
+// - La referencia es un "ref" como cualquier otro: se pasa como parámetro (&), se guarda en
+//   listas y registros, y se devuelve con "return v" (no "return &v").
+// - Ojo: los argumentos de "that" no pueden contener otra llamada a función
+//   (that f(abs(x)) falla con "Función: thatf no reconocida"): calcule antes el valor en una variable.
+#include "dkli.dkh"
+#!
+program "point-that"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    doble::x
+    {
+        return x * 2
+    }
+    cuadrado::x
+    {
+        return x * x
+    }
+
+    // Recibe una función como parámetro
+    aplica_a_todos::&fn, &lista
+    {
+        ref res = list.create()
+        for i=0; i<list.count(lista)
+        {
+            n = list.num(lista, i)
+            that fn(n) -> r
+            r -> res
+        }
+        return res
+    }
+
+    point f to doble
+    that f(21) -> r
+    do print("that f(21) = " + str(r))
+
+    ref nums = list.of(1, 2, 3)
+    point g to cuadrado
+    do print("como parámetro: " + to.json(aplica_a_todos(g, nums)))
+
+    // Tabla de operaciones en un registro: despacho por nombre
+    new ops
+    {
+        @"doble*": f
+        @"cuadrado*": g
+    }
+    nombre = "cuadrado"
+    ref op = @@(ops, "&" + nombre)
+    that op(9) -> r2
+    do print("desde un registro: " + nombre + "(9) = " + str(r2))
+
+    // Desde una lista
+    ref fs = list.create()
+    f, g -> fs
+    ref segunda = list.obj(fs, 1)
+    that segunda(4) -> r3
+    do print("desde una lista: " + str(r3))
+}

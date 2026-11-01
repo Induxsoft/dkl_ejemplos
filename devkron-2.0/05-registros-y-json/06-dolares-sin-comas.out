@@ -1,0 +1,3 @@
+el programa arranca
+error: {1} Error en expresión: Se esperaba un operador (bloque $$, línea 13) [06-dolares-sin-comas.dkl][Ln= 12]
+clásica: {"a":1,"b":2}

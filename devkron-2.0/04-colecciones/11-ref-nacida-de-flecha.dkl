@@ -1,0 +1,49 @@
+// Propósito: una trampa al agrupar con flechas, y su causa.
+// - @@(r, "&campo_inexistente") no devuelve una referencia nula nueva: devuelve 0, y "ref g = 0"
+//   apunta a la ranura de objetos compartida que usan las referencias nulas (la misma de @null).
+// - La flecha x -> g, cuando g es nula, crea la lista EN ESA RANURA. Desde ese momento @null y
+//   cualquier @@(..., "&no_existe") devuelven esa lista: isnull() deja de dar 1 en todo el programa.
+// - Patrón seguro: preguntar con field.exist(r, k) (o field.typeof) y crear la lista con list.create()
+//   antes de usar la flecha. Nunca aplique una flecha a una ref que vino de @@ sin verificarla.
+#include "dkli.dkh"
+#!
+program "ref-flecha"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    // Forma segura (primero, mientras @null sigue siendo nulo)
+    new s {}
+    for i=0; i<2
+    {
+        k = ifstr(i == 0, "a", "b")
+        if not(field.exist(s, k))
+        {
+            ref nueva = list.create()
+            s<k + "*">: nueva
+        }
+        ref h = @@(s, "&" + k)
+        v = i + 1
+        v -> h
+    }
+    do print("segura:  " + to.json(s))
+    do print("isnull(@null) = " + str(isnull(@null)))
+
+    // Forma ingenua
+    new r {}
+    x = 1
+    y = 2
+    ref g = @@(r, "&a")
+    x -> g
+    r<"a*">: g
+    ref g = @@(r, "&b")
+    do print("isnull(g) tras pedir un campo que no existe: " + str(isnull(g)) + "   <- se esperaba 1")
+    y -> g
+    r<"b*">: g
+    do print("ingenua: " + to.json(r) + "   <- 'a' y 'b' son la misma lista")
+    do print("isnull(@null) = " + str(isnull(@null)) + "   <- la ranura nula quedó ocupada")
+    new vacio {}
+    ref z = @@(vacio, "&lo_que_sea")
+    do print("@@ de un campo inexistente ahora devuelve: " + to.json(z))
+    do print("field.exist sigue diciendo la verdad: " + str(field.exist(vacio, "lo_que_sea")))
+}

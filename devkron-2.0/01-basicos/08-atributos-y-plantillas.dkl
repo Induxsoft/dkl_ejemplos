@@ -1,0 +1,39 @@
+// Propósito: atributos de variables (min, max, round) y plantillas de variables.
+// - Los atributos se fijan en un bloque { set ... } justo después de declarar la variable.
+// - round redondea cada asignación; min y max limitan el valor (fuera de rango es error).
+// - Ojo: si una asignación queda fuera de rango, la variable queda EN ERROR: leerla vuelve a lanzar
+//   el mismo error hasta que se le asigne un valor válido.
+// - Una plantilla v[otra] hereda los atributos y el valor inicial de "otra".
+// - functions.dkh trae plantillas listas: @int, @number, @bool, @string... y @true / @false.
+#include "dkli.dkh"
+#!
+program "atributos"
+{
+    #include "functions.dkh"
+
+    porcentaje = 0
+    {
+        set min: 0
+        set max: 100
+        set round: 2
+    }
+    porcentaje = 12.3456
+    do print("redondeado: " + str(porcentaje))
+
+    porcentaje = 150
+    exception
+    {
+        do print("fuera de rango: " + last_error())
+        do clear_exceptions()
+    }
+    do print("vartype tras el error: " + str(vartype("porcentaje")))
+    porcentaje = 12.3456
+    do print("reasignada: " + str(porcentaje))
+
+    descuento[porcentaje] = 5.555
+    do print("hereda round: " + str(descuento))
+
+    cantidad[@int] = 3
+    activo[@bool]
+    do print("cantidad " + str(cantidad) + ", activo " + str(activo) + ", @true=" + str(@true))
+}

@@ -1,0 +1,34 @@
+// Propósito: repeat N { } repite el bloque N veces.
+// Ojo: la cantidad se VUELVE A EVALUAR en cada vuelta. Si el bloque cambia la variable de la
+// expresión, cambia el número de repeticiones. Copie el valor a otra variable si necesita fijarlo.
+#include "dkli.dkh"
+#!
+program "repeat"
+{
+    #include "functions.dkh"
+
+    linea = ""
+    repeat 3
+    {
+        linea = linea + "=-"
+    }
+    do print(linea)
+
+    veces = 2
+    n = 0
+    repeat veces
+    {
+        veces = 5
+        n = n + 1
+    }
+    do print("se repitió " + str(n) + " veces: 'veces' cambió a 5 dentro del bloque")
+
+    pendientes = 3
+    procesados = 0
+    repeat pendientes
+    {
+        procesados = procesados + 1
+        if procesados == 2 { break }
+    }
+    do print("break también sale de repeat: " + str(procesados))
+}

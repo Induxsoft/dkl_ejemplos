@@ -1,0 +1,17 @@
+// Propósito: plantillas de texto con marcas #<expresión> y #<expresión:formato>.
+// - En contexto imperativo, las marcas solo se evalúan si la cadena pasa por ftext().
+// - El formato (después de ':') es de C# y solo aplica a números.
+// - Útil para correos, mensajes y plantillas leídas de archivo: ftext(file.rtext("plantilla.txt")).
+#include "dkli.dkh"
+#!
+program "ftext"
+{
+    #include "functions.dkh"
+
+    cliente = "Ana"
+    total = 1234.5
+    folio = 7
+    s = "Hola #<cliente>, su pedido #<padleft(str(folio), 5, \"0\")> suma #<total:$ #,##0.00> (IVA: #<total * 0.16:0.00>)."
+    do print("sin ftext: " + s)
+    do print("con ftext: " + ftext(s))
+}

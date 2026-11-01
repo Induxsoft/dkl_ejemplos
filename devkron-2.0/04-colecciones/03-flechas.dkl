@@ -1,0 +1,45 @@
+// Propósito: las flechas de 2.0 para listas.
+// - a, b, c -> l   anexa en orden (crea la lista si no existe). Un ref aporta el objeto mismo.
+// - l -> a, b      saca l[0], l[1] en variables (dos o más).
+// - x <- l         saca el primer elemento (forma para una sola variable).
+// - a -> b         SIEMPRE anexa: con dos listas, mete la lista a como elemento de b.
+// - La sentencia debe empezar con un identificador: 1, 2 -> l es error; use variables o $$.
+// - Una expresión con resta va entre paréntesis: b, (a - 1) -> l
+#include "dkli.dkh"
+#!
+program "flechas"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    a = 1
+    s = "dos"
+    new r
+    {
+        @"k": 3
+    }
+    a, s, r -> l
+    do print("anexar: " + to.json(l))
+    a, (a + 1), str(a * 10) -> l
+    do print("con expresiones: " + to.json(l))
+
+    l -> uno, dos
+    do print("sacar dos: " + str(uno) + " y " + dos)
+    primero <- l
+    do print("sacar uno: " + str(primero))
+    n, t, o <- l
+    do print("el tercero es un registro: " + to.json(o))
+
+    ref vacia = list.create()
+    ref otra = list.create()
+    vacia -> otra
+    do print("a -> b con dos listas: " + to.json(otra) + "   <- anexó la lista como elemento")
+
+    ref corta = list.of(1)
+    corta -> x, y
+    exception
+    {
+        do print("faltan elementos: " + last_error())
+        do clear_exceptions()
+    }
+}

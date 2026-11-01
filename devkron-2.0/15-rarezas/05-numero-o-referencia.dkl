@@ -1,0 +1,37 @@
+// Propósito: cuándo un objeto se convierte en un número (su índice en la tabla de objetos).
+// - Una función que devuelve un objeto, asignada a una variable de VALOR, da el índice: use ref.
+// - list.of(r) y list.add con números o cadenas numéricas trabajan con índices.
+// - En un bloque $$, f(x) que devuelve objeto inserta el índice: use &f(x).
+// - Al guardar un objeto en un registro, el campo lleva *: @"hijo*": obj  /  r<"hijo*">: obj.
+#include "dkli.dkh"
+#!
+program "numero-o-ref"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    crea::
+    {
+        new x
+        {
+            @"k": 1
+        }
+        return x
+    }
+    n = crea()
+    ref o = crea()
+    do print("en variable de valor: " + str(vartype("n")) + " (número); en ref: " + to.json(o))
+
+    ref l = list.of(o, "a")
+    do print("list.of con un ref: " + str(list.type(l, 0)) + " (2 = número, el índice)")
+    o, "a" -> l2
+    do print("con flecha: " + to.json(l2))
+
+    new r
+    {
+        @"sin_asterisco": 0
+    }
+    r<"sin_asterisco">: o
+    r<"con_asterisco*">: o
+    do print("en registro: " + to.json(r))
+}

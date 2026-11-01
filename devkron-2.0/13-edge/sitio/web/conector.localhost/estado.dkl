@@ -1,0 +1,16 @@
+// probar: parse
+// Propósito: ruta de salud del conector; lee la configuración del sitio con config.get.
+// Con Devkron Edge: dkle run --root sitio GET /estado
+#include "dkli.dkh"
+#!
+program "estado"
+{
+    #include "edge.dkh"
+
+    new r
+    {
+        @"ok": 1
+        @"moneda": config.dget("moneda", "MXN")
+    }
+    do httpres.json(r)
+}

@@ -1,0 +1,33 @@
+// probar: parse
+// Propósito: reintentar una petición idempotente con espera creciente.
+// El cliente no reintenta solo. threads.sleep(ms) pausa la ejecución.
+#include "dkli.dkh"
+#!
+program "reintentos"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "threads.dkh"
+    #include "http.dkh"
+
+    obtener::url, intentos
+    {
+        espera = 500
+        for i=1; i<=intentos
+        {
+            ref r = http.get_json(url, @null)
+            if http.status() == 200 { return r }
+            exception
+            {
+                do clear_exceptions()
+            }
+            do print("intento " + str(i) + " falló (HTTP " + str(http.status()) + "); espero " + str(espera) + " ms")
+            do threads.sleep(espera)
+            espera = espera * 2
+        }
+        do rise_error(503, "No se pudo obtener " + url)
+    }
+
+    ref datos = obtener("https://api.example.com/estado", 3)
+    do print(to.json(datos))
+}

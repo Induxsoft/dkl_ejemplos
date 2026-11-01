@@ -1,0 +1,24 @@
+// Propósito: de texto JSON a objetos y de regreso.
+// - from.json(texto) devuelve un registro o una lista; to.json(objeto) la cadena.
+// - Los registros de from.json SÍ distinguen mayúsculas en los nombres (los de new y $$ no).
+// - true/false de JSON se leen como 1/0 con @@ y se escriben de nuevo como true/false.
+// - to.json escapa lo que no es ASCII (é se escribe \u00E9).
+#include "dkli.dkh"
+#!
+program "json"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    texto = '{"Cliente":"José","activo":true,"partidas":[{"sku":"A1","precio":10.50}]}'
+    ref d = from.json(texto)
+    do print("Cliente: " + @@(d, "Cliente") + " / cliente: [" + @@(d, "cliente") + "]   <- distingue mayúsculas")
+    do print("activo como número: " + str(@@(d, "#activo")))
+    ref partidas = @@(d, "&partidas")
+    ref p0 = list.obj(partidas, 0)
+    do print("precio: " + str(@@(p0, "#precio")))
+    do print("de regreso: " + to.json(d))
+
+    ref lista = from.json("[1, \"dos\", null]")
+    do print("lista: " + str(list.count(lista)) + " elementos, tipo del 3o: " + str(list.type(lista, 2)))
+}

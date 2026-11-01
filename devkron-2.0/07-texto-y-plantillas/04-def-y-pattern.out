@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuracion ><seccion titulo = "Servidor" ><opcion nombre = "puerto" valor = "8080" /><opcion nombre = "host" valor = "0.0.0.0" /></seccion><seccion titulo = "Bitácora" ><opcion nombre = "nivel" valor = "info" /></seccion></configuracion>

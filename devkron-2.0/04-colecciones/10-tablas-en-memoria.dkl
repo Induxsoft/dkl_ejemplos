@@ -1,0 +1,47 @@
+// Propósito: tablas en memoria (table.*, row.*, cell.*), útiles para resultados tabulares.
+// - table.create(registro) crea las columnas a partir de los campos de un registro modelo.
+// - row.add(tabla, registro) agrega un renglón; row.upd(tabla, i, registro) lo cambia.
+// - cell.num / cell.str usan el número de columna; cell.numc / cell.strc, su nombre.
+#include "dkli.dkh"
+#!
+program "tablas"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    new modelo
+    {
+        @"producto": ""
+        @"cantidad": 0
+        @"precio": 0
+    }
+    ref t = table.create(modelo)
+
+    ref partidas = from.json('[{"producto":"Café","cantidad":2,"precio":35},{"producto":"Té","cantidad":1,"precio":28.5}]')
+    go foreach.lobj(value:p) with(partidas)
+    {
+        ref reg = p
+        do row.add(t, reg)
+    }
+
+    total = 0
+    for i=0; i<table.rows(t)
+    {
+        importe = cell.numc(t, i, "cantidad") * cell.numc(t, i, "precio")
+        total = total + importe
+        do print(cell.strc(t, i, "producto") + ": " + str(importe) + " (columna 0 = " + cell.str(t, i, 0) + ")")
+    }
+    // cell.set/cell.setc reciben un OBJETO: un número llega como índice de objeto y falla.
+    // Para cambiar valores, use row.upd con un registro.
+    new cambio
+    {
+        @"producto": "Té verde"
+        @"cantidad": 3
+        @"precio": 30
+    }
+    do row.upd(t, 1, cambio)
+    do print("renglón 1 cambiado: " + cell.strc(t, 1, "producto") + " x" + str(cell.numc(t, 1, "cantidad")))
+    do print("total: " + str(total) + " en " + str(table.rows(t)) + " renglones y " + str(table.cols(t)) + " columnas")
+    ref r = row.get(t, 0)
+    do print("renglón 0 como registro: " + to.json(r))
+}

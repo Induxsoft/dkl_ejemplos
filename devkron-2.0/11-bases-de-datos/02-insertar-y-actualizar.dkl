@@ -1,0 +1,45 @@
+// probar: parse
+// Propósito: insertar, actualizar y borrar.
+// - dbr.insert(db, tabla, registro): los campos del registro son las columnas.
+// - dbr.update(db, tabla, registro, "condición con @parámetros", parámetros).
+// - dbr.delete(db, tabla, "condición", parámetros).
+// - dbr.execute(db, sql, parámetros) devuelve las filas afectadas (DDL: 0; SELECT: -1).
+#include "dkli.dkh"
+#!
+program "insertar"
+{
+    #include "functions.dkh"
+    #include "dbr.dkh"
+
+    ref db = dbr.open("tienda@ejemplos")
+
+    new nuevo
+    {
+        @"sku": "MIEL-01"
+        @"nombre": "Miel de abeja 250 g"
+        @"precio": 85
+        @"existencia": 10
+    }
+    do dbr.insert(db, "productos", nuevo)
+
+    new cambio
+    {
+        @"precio": 89.5
+    }
+    new llave
+    {
+        @"sku": "MIEL-01"
+    }
+    do dbr.update(db, "productos", cambio, "sku = @sku", llave)
+
+    new subir
+    {
+        @"factor": 1.05
+        @"minimo": 50
+    }
+    filas = dbr.execute(db, "UPDATE productos SET precio = ROUND(precio * @factor, 2) WHERE precio < @minimo", subir)
+    do print("precios ajustados: " + str(filas))
+
+    do dbr.delete(db, "productos", "sku = @sku", llave)
+    do dbr.close(db)
+}

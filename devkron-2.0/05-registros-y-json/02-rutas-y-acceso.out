@@ -1,0 +1,8 @@
+{"nombre":"Juan","pareja":{"edad":31},"ciudad":"Tuxtla"}
+cadena: Juan, número: 32
+inexistente como cadena: [], como número: 0
+referencia: {"edad":31}
+nivel intermedio inexistente: {1} The given key 'direccion' was not present in the dictionary. [02-rutas-y-acceso.dkl][Ln= 30]
+escritura con #: {"Ana":10,"#Ana":99}   <- la segunda creó la llave "#Ana"
+lectura con #: 10
+field.dstr: (sin apodo), field.exist: 1

@@ -1,0 +1,4 @@
+sort: [2.5,10,"B","a","b"]
+sort_by total desc (estable): [{"cliente":"Ana","total":100},{"cliente":"Eva","total":100},{"cliente":"Beto","total":70},{"cliente":"Luis","total":50}]
+sort_by cliente: [{"cliente":"Ana","total":100},{"cliente":"Beto","total":70},{"cliente":"Eva","total":100},{"cliente":"Luis","total":50}]
+reverse: [3,2,1]

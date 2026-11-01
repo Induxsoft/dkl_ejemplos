@@ -1,0 +1,5 @@
+GET sitio/api/cliente.dkl -> HTTP 200 {"success":true,"data":{"id":5,"nombre":"Cliente 5","metodo":"GET"}}
+GET sitio/api/cliente.dkl -> HTTP 400 {"success":false,"message":"Falta el id"}  (salió con return)
+GET sitio/api/pedido.dkl -> HTTP 405 {"success":false,"message":"Use POST"}  (salió con return)
+POST sitio/api/pedido.dkl -> HTTP 200 {"success":true,"data":{"cliente":"Ana","total":25.0}}
+POST sitio/api/pedido.dkl -> HTTP 422 {"success":false,"message":"Faltan datos"}  (salió con return)

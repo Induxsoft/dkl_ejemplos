@@ -1,0 +1,16 @@
+// Propósito: return en el nivel principal termina el programa (útil para validar y salir temprano).
+// Lo que sigue al return no se ejecuta.
+#include "dkli.dkh"
+#!
+program "salida-temprana"
+{
+    #include "functions.dkh"
+
+    archivo = ""
+    if archivo == ""
+    {
+        do print("falta el nombre del archivo; termino")
+        return
+    }
+    do print("esto no se imprime")
+}

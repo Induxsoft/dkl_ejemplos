@@ -1,0 +1,3 @@
+{"nombre":"Ana L\u00F3pez","rfc":"LOAA800101AB1","saldo":1500.5,"etiquetas":["nuevo","vip"],"direccion":{"ciudad":"Tuxtla","cp":"29000"}}
+{"nombre":"Ana L\u00F3pez","rfc":"LOAA800101AB1","saldo":0,"etiquetas":["nuevo","vip"],"direccion":{"ciudad":"Tuxtla","cp":"29000","colonia":"Centro"}}
+sin distinguir mayúsculas: Ana López

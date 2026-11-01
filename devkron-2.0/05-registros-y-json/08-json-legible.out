@@ -1,0 +1,11 @@
+{
+  "cliente":"Ana",
+  "total":118.50,
+  "partidas":[
+    {
+      "sku":"A1",
+      "cant":2
+    }
+  ],
+  "notas":[]
+}

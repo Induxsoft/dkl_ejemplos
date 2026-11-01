@@ -1,0 +1,4 @@
+https | tienda.example.com | 8443 | /api/productos
+q = niño
+https://h/buscar?pagina=2&q=caf%C3%A9%20con%20leche
+https://h/a/d

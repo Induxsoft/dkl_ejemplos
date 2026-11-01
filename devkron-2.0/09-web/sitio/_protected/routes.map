@@ -1,0 +1,5 @@
+# Rutas amigables: [métodos:] patrón > programa. Gana la primera que coincide.
+# {id} llega en request/get; {#id} solo acepta números; {x?} es opcional (solo el último).
+get        : /api/clientes/{#id}   > /api/cliente.dkl
+post       : /api/pedidos          > /api/pedido.dkl
+get        : /                     > /index.dkl

@@ -1,0 +1,8 @@
+año 2026, mes 10, día 31
+ndatetime.tostr: 2026-10-31 00:00   <- la hora se pierde
++1 mes (ndatetime.add): 20261130
+días entre fechas: 54
+date.add +90 min: 20261031.200000
+date.add +1 mes: 20260228.000000  (fin de mes ajustado)
+ISO: 2026-10-31T18:30:00  día de la semana (0=domingo): 6
+inicio y fin de mes: 20261001.000000 - 20261031.235959

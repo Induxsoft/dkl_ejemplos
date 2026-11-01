@@ -1,0 +1,2 @@
+sum_by:   {"Ana":130,"Luis":50,"Eva":70}
+group_by: {"Ana":[{"cliente":"Ana","total":100},{"cliente":"Ana","total":30}],"Luis":[{"cliente":"Luis","total":50}],"Eva":[{"cliente":"Eva","total":70}]}

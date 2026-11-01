@@ -1,0 +1,46 @@
+// Propósito: bloques de datos $$ ... $$ (2.0): JSON con expresiones DKL dentro de new/using/member.
+// - Los elementos se separan con comas (sin comas falla AL EJECUTAR, ver 06-dolares-sin-comas.dkl).
+// - Valores: literales JSON o cualquier expresión DKL; se permite una coma final y comentarios.
+// - Un ref escrito solo inserta el objeto. Una expresión que devuelve un objeto inserta su ÍNDICE:
+//   use &expr para insertar el objeto.
+// - Un bloque con forma de lista dentro de using AGREGA a la lista; para agregar un registro, enciérrelo en [ ].
+#include "dkli.dkh"
+#!
+program "dolares"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    precio = 100
+    nombre = "pedro"
+    ref etiquetas = list.of("a", "b")
+    devuelve::&o
+    {
+        return o
+    }
+    new pedido
+    {$$
+        // comentario dentro del bloque
+        "cliente": toupper(nombre),
+        "subtotal": precio,
+        "iva": precio * 0.16,
+        "mayor_a_50": precio > 50,
+        "etiquetas": etiquetas,
+        "copia": &devuelve(etiquetas),
+        "partidas": [{"sku": "A1", "cant": 2}],
+        "pagado": false,
+        "notas": null,
+    $$}
+    do print(to.json(pedido))
+
+    new l {$$ 1, 2, "tres" $$}
+    using l {$$ [{"i": 4}] $$}
+    do print(to.json(l))
+
+    using pedido
+    {
+        $$ "estado": "abierto" $$
+        member @"partidas" {$$ [{"sku": "B2", "cant": 1}] $$}
+    }
+    do print(to.json(pedido))
+}

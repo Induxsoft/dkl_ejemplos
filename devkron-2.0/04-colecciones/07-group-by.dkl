@@ -1,0 +1,32 @@
+// Propósito: sum_by y group_by por una llave calculada.
+// - Para ESCRIBIR un campo con nombre calculado: r<k>: valor
+// - Para LEERLO como número: @@(r, "#" + k). (r<"#" + k> crearía una llave que se llama "#Ana").
+// - Antes de tomar la lista de un grupo, verifique con field.exist(r, k) y créela si falta
+//   (más seguro que isnull(@@(r, "&" + k)); ver 11-ref-nacida-de-flecha.dkl).
+#include "dkli.dkh"
+#!
+program "group-by"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    ref ventas = from.json('[{"cliente":"Ana","total":100},{"cliente":"Luis","total":50},{"cliente":"Ana","total":30},{"cliente":"Eva","total":70}]')
+
+    new sumas {}
+    new grupos {}
+    go foreach.lobj(value:x) with(ventas)
+    {
+        ref o = x
+        k = o.cliente
+        sumas<k>: @@(sumas, "#" + k) + o.total
+        if not(field.exist(grupos, k))
+        {
+            ref nueva = list.create()
+            grupos<k + "*">: nueva
+        }
+        ref g = @@(grupos, "&" + k)
+        o -> g
+    }
+    do print("sum_by:   " + to.json(sumas))
+    do print("group_by: " + to.json(grupos))
+}

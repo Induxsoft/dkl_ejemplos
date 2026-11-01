@@ -1,0 +1,37 @@
+// Propósito: crear registros con new, completarlos con using, y anidar con member / new member.
+// - Un campo por línea: @"nombre": valor   o   nombre := valor (morsa, si el nombre es identificador).
+// - Los campos que guardan objetos llevan * al final: @"lista*": mi_lista.
+// - Los nombres de campo no distinguen mayúsculas.
+#include "dkli.dkh"
+#!
+program "registros"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    ref etiquetas = list.of("nuevo", "vip")
+    new cliente
+    {
+        @"nombre": "Ana López"
+        rfc := "LOAA800101AB1"
+        @"saldo": 1500.5
+        @"etiquetas*": etiquetas
+        new member @"direccion"
+        {
+            @"ciudad": "Tuxtla"
+            cp := "29000"
+        }
+    }
+    do print(to.json(cliente))
+
+    using cliente
+    {
+        @"saldo": 0
+        member @"direccion"
+        {
+            @"colonia": "Centro"
+        }
+    }
+    do print(to.json(cliente))
+    do print("sin distinguir mayúsculas: " + @@(cliente, "NOMBRE"))
+}

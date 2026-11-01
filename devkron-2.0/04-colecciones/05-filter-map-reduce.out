@@ -1,0 +1,5 @@
+filter > 5: [8,12]
+map * 2:    [6,16,2,24]
+reduce suma: 24
+filter de registros: [{"n":"Luis","saldo":500},{"n":"Eva","saldo":20}]
+pluck de nombres: ["Ana","Luis","Eva"]

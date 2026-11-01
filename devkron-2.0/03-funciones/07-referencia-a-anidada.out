@@ -1,0 +1,2 @@
+por3(7) = 21
+por3(7) después de crear por10 = 70   <- no hay closures

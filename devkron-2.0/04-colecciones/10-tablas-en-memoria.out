@@ -1,0 +1,5 @@
+Café: 70 (columna 0 = Café)
+Té: 28.5 (columna 0 = Té)
+renglón 1 cambiado: Té verde x3
+total: 98.5 en 2 renglones y 3 columnas
+renglón 0 como registro: {"producto":"Caf\u00E9","cantidad":2,"precio":35}

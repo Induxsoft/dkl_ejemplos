@@ -1,0 +1,16 @@
+// Propósito: un error que nadie atrapa termina el programa.
+// - En consola, dkl imprime el mensaje y termina con código de salida 1.
+// - En el servidor web, la página responde HTTP 500.
+// El número de [Ln= n] puede no coincidir con la línea real (vea la documentación sobre números de línea).
+#include "dkli.dkh"
+#!
+program "no-manejado"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    do print("antes del error")
+    ref r = from.json('{"a":1}')
+    x = @@(r, "#a") / 0
+    do print("esto no se imprime")
+}

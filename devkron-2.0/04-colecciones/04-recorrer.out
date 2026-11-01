@@ -1,0 +1,10 @@
+lstr 0: Ana
+lstr 1: Luis
+lobj 0: Ana debe 10
+lobj 1: Luis debe 0
+fnum 0: cafe = 35
+fnum 1: te = 28.5
+fstr idioma = es
+fstr moneda = MXN
+for 0: Ana
+for 1: Luis

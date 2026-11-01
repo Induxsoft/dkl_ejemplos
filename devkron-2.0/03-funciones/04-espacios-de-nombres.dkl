@@ -1,0 +1,38 @@
+// Propósito: module/codeblock con espacio de nombres, namespace y alias.
+// - En module "descripción:espacio" lo que va después de ':' es el espacio de nombres.
+// - Dentro del bloque basta el nombre corto; afuera se usa el nombre completo.
+// - namespace "x.y" agrega un espacio de respaldo donde buscar funciones.
+// - alias "nombre.completo" "corto" da un nombre corto (no vale en point ... to ni en go).
+#include "dkli.dkh"
+#!
+program "espacios"
+{
+    #include "functions.dkh"
+
+    module "Utilidades de impuestos:fiscal.iva"
+    {
+        tasa::
+        {
+            return 0.16
+        }
+        calcula::importe
+        {
+            return round(importe * tasa(), 2)
+        }
+        do print("dentro del módulo: " + str(calcula(100)))
+    }
+
+    do print("afuera, nombre completo: " + str(fiscal.iva.calcula(250)))
+
+    codeblock "con namespace:reportes"
+    {
+        namespace "fiscal.iva"
+        do print("con namespace: " + str(calcula(10)))
+    }
+
+    codeblock "con alias:otro"
+    {
+        alias "fiscal.iva.calcula" "iva"
+        do print("con alias: " + str(iva(20)))
+    }
+}

@@ -1,0 +1,27 @@
+// Propósito: && y || evalúan SIEMPRE los dos lados (no hay evaluación de cortocircuito).
+// Consecuencia: "if not(isnull(o)) && @@(o, ...)" falla igual si o es nula. Use if anidados.
+#include "dkli.dkh"
+#!
+program "cortocircuito"
+{
+    #include "functions.dkh"
+
+    llamadas = 0
+    marca::
+    {
+        do print("  se evaluó marca()")
+        return 1
+    }
+    do print("0 && marca():")
+    if 0 && marca() { do print("  no") }
+    do print("1 || marca():")
+    if 1 || marca() { do print("  sí entra") }
+
+    // Forma segura con if anidados
+    ref o = _null()
+    if not(isnull(o))
+    {
+        if @@(o, "#total") > 0 { do print("con total") }
+    }
+    do print("con if anidados no se toca la referencia nula")
+}

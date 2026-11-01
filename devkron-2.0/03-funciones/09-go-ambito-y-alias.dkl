@@ -1,0 +1,54 @@
+// Propósito: qué puede y qué no puede hacer el bloque de un go.
+// - Modifica las variables de quien llama (corre en su ámbito).
+// - Asignar al alias de una variable expuesta NO cambia la variable de la función y NO da error:
+//   lo que hace es crear (o cambiar) una variable de QUIEN LLAMA con ese nombre. Dentro del bloque,
+//   el alias se sigue leyendo con el valor expuesto.
+// - El alias no se puede usar directo con las flechas (->): "La variable mapeada no está disponible".
+//   Cópielo antes a una variable local. (Si quien llama ya tiene una variable con el nombre del
+//   alias, la flecha usa ESA variable, no el valor expuesto: otra razón para copiar.)
+#include "dkli.dkh"
+#!
+program "go-ambito"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    cuenta::max
+    {
+        expose i
+        for i=0; i<max
+        {
+            that
+        }
+        return "fin con i=" + str(i)
+    }
+
+    contador = 0
+    lecturas = ""
+    go cuenta (i:v) with(3) -> r
+    {
+        contador = contador + 1
+        v = 99
+        lecturas = lecturas + str(v) + " "
+    }
+    do print("contador de quien llama = " + str(contador) + "; " + r)
+    do print("dentro del bloque v se leyó como: " + lecturas)
+    do print("pero ahora quien llama tiene su propia v = " + str(v))
+
+    go cuenta (i:w) with(3) -> r
+    {
+        w -> directos
+    }
+    exception
+    {
+        do print("flecha con el alias: " + last_error())
+        do clear_exceptions()
+    }
+
+    go cuenta (i:x) with(3) -> r
+    {
+        copia = x
+        copia -> copias
+    }
+    do print("copiando primero: " + to.json(copias))
+}

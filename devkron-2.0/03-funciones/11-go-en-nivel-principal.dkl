@@ -1,0 +1,17 @@
+// Propósito: return dentro del bloque de un go escrito en el nivel principal TERMINA EL PROGRAMA,
+// sin error y sin aviso. Lo mismo pasa con break si no hay un ciclo que lo rodee.
+// La última línea de este programa nunca se imprime.
+#include "dkli.dkh"
+#!
+program "go-nivel-principal"
+{
+    #include "functions.dkh"
+
+    ref l = list.of(10, 20, 30)
+    go foreach.lnum(index:i, value:v) with(l)
+    {
+        do print("vuelta " + str(i))
+        if i == 1 { return }
+    }
+    do print("esto no se imprime")
+}

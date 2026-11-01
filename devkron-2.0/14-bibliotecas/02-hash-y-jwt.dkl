@@ -1,0 +1,31 @@
+// Propósito: hashes, firmas HMAC, tokens aleatorios y JWT (hash.dkh).
+// - hash.equals compara en tiempo constante (úselo para firmas y tokens).
+// - jwt.decode rechaza firmas inválidas, tokens caducados y el algoritmo "none".
+#include "dkli.dkh"
+#!
+program "hash"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "hash.dkh"
+
+    do print("sha256: " + hash.sha256("hola"))
+    firma = hash.hmac_sha256_b64("{\"id\":15}", "secreto-del-webhook")
+    do print("firma de webhook: " + firma + " ¿coincide? " + str(hash.equals(firma, hash.hmac_sha256_b64("{\"id\":15}", "secreto-del-webhook"))))
+    do print("token aleatorio de " + str(length(hash.random_token(32))) + " caracteres")
+
+    new datos
+    {
+        @"sub": "usuario-7"
+        @"rol": "admin"
+    }
+    token = jwt.encode(datos, "secreto-de-la-app", 3600)
+    ref d = jwt.decode(token, "secreto-de-la-app")
+    do print("JWT: sub=" + field.str(d, "sub") + " rol=" + field.str(d, "rol") + " vigencia=" + str(field.num(d, "exp") - field.num(d, "iat")) + " s")
+    ref x = jwt.decode(token, "otro-secreto")
+    exception
+    {
+        do print("con otro secreto: rechazado")
+        do clear_exceptions()
+    }
+}

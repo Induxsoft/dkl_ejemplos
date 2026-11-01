@@ -1,0 +1,14 @@
+// Propósito: el programa mínimo de consola.
+// - dkli.dkh trae la sintaxis imperativa y debe ir antes que todo.
+// - #! cambia al contexto imperativo; program es el nodo raíz (un archivo tiene uno solo).
+// - Las bibliotecas se incluyen DENTRO del nodo raíz.
+// - Una función suelta se llama con "do"; no hay punto y coma.
+#include "dkli.dkh"
+#!
+program "hola"
+{
+    #include "functions.dkh"
+
+    nombre = "mundo"
+    do print("Hola, " + nombre)
+}

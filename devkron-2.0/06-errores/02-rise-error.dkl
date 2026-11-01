@@ -1,0 +1,30 @@
+// Propósito: lanzar errores propios con rise_error(código, mensaje) y decidir según el código.
+#include "dkli.dkh"
+#!
+program "rise-error"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    valida_pedido::&p
+    {
+        if @@(p, "cliente") == "" { do rise_error(400, "Falta el cliente") }
+        if @@(p, "#total") <= 0 { do rise_error(422, "El total debe ser mayor que cero") }
+        return 1
+    }
+
+    ref pedidos = from.json('[{"cliente":"Ana","total":10},{"cliente":"","total":5},{"cliente":"Eva","total":0}]')
+    for i=0; i<list.count(pedidos)
+    {
+        ref p = list.obj(pedidos, i)
+        ok = valida_pedido(p)
+        do print("pedido " + str(i) + " válido")
+        exception
+        {
+            c = last_error_code()
+            if c == 400 { do print("pedido " + str(i) + ": dato faltante (" + str(c) + ")") }
+            else { do print("pedido " + str(i) + ": dato inválido (" + str(c) + ")") }
+            do clear_exceptions()
+        }
+    }
+}

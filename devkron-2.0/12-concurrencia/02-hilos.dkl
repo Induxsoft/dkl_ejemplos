@@ -1,0 +1,26 @@
+// Propósito: repartir trabajo en hilos con threads.run / threads.wait / threads.pool.
+// - threads.run(archivo, variable_global, dato) lanza _hilo.dkl y devuelve la tarea.
+// - threads.wait(tareas, ms) espera; threads.result(tarea) da la salida del hilo; threads.error, su error.
+// - threads.pool(archivo, variable, valores, máximo) corre un hilo por valor y devuelve las salidas en orden.
+// La ruta del programa es relativa a la carpeta de trabajo: ejecútelo desde esta carpeta.
+#include "dkli.dkh"
+#!
+program "hilos"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "threads.dkh"
+
+    ref a = threads.run("_hilo.dkl", "arg", "10")
+    ref b = threads.run("_hilo.dkl", "arg", "100")
+    ref tareas = list.create()
+    a, b -> tareas
+    if not(threads.wait(tareas, 30000)) { do print("se agotó el tiempo") }
+    do print("a: " + threads.result(a))
+    do print("b: " + threads.result(b))
+    do print("error de b: [" + threads.error(b) + "]")
+
+    ref valores = list.of("1", "2", "3", "4")
+    ref salidas = threads.pool("_hilo.dkl", "arg", valores, 2)
+    do print("pool: " + to.json(salidas))
+}

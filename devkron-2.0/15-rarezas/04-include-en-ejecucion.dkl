@@ -1,0 +1,27 @@
+// Propósito: la sentencia include (sin #) carga y ejecuta un archivo cuando la ejecución pasa por ella.
+// - El código incluido corre en el ÁMBITO de quien lo incluye: ve y cambia sus variables.
+// - Un return dentro del archivo incluido sale de la FUNCIÓN que hizo el include.
+// - El archivo se analiza como un documento aparte: necesita #include "dkli.dkh", #! y un solo nodo raíz
+//   (vea parte.dkh). Es distinto de la directiva #include, que inserta el texto al cargar.
+// - La ruta puede ser una expresión.
+#include "dkli.dkh"
+#!
+program "include"
+{
+    #include "functions.dkh"
+
+    procesa::
+    {
+        contador = 10
+        include "parte.dkh"
+        do print("esto no se imprime: parte.dkh hizo return")
+        return 0
+    }
+
+    contador = 1
+    archivo = "parte.dkh"
+    include archivo
+    do print("después del include en el programa: contador = " + str(contador))
+    r = procesa()
+    do print("procesa() devolvió " + str(r))
+}

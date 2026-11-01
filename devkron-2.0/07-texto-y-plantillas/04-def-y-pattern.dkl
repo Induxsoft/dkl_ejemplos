@@ -1,0 +1,22 @@
+// Propósito: #def y #pattern para definir sintaxis propia (así está escrita la sintaxis imperativa en dkli.dkh).
+// - #def nombre(atr1, atr2) "elemento"   asocia un identificador con un nombre de elemento; la lista de
+//   atributos por orden va pegada al nombre y separada por COMAS (con espacios da el error 108).
+// - #pattern nombre "PALABRA '$atributo'"           reconoce una forma y la convierte en ese elemento.
+// Este ejemplo produce XML con una mini sintaxis para describir una configuración.
+#include "dkli.dkh"
+#def opcion(nombre, valor) "opcion"
+#pattern opcion "OPCION '$nombre' = '@valor'"
+#def seccion(titulo) "seccion"
+#pattern seccion "SECCION '@titulo'"
+configuracion
+{
+    SECCION "Servidor"
+    {
+        OPCION puerto = "8080"
+        OPCION host = "0.0.0.0"
+    }
+    SECCION "Bitácora"
+    {
+        OPCION nivel = "info"
+    }
+}

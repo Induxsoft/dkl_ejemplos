@@ -1,0 +1,78 @@
+// probar: parse
+// Propósito: una venta con sus partidas en una transacción: todo o nada.
+// Patrón: begin -> trabajo -> commit; en exception: rollback y relanzar con el mismo código.
+#include "dkli.dkh"
+#!
+program "transaccion"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "dbr.dkh"
+
+    registrar_venta::&db, &venta
+    {
+        do dbr.begin(db)
+
+        new enc
+        {
+            @"fecha": ndatetime.tostr(ndatetime.now(), "yyyy-MM-dd")
+            @"cliente": @@(venta, "cliente")
+            @"total": 0
+        }
+        do dbr.insert(db, "ventas", enc)
+        id_venta = dbr.num(db, "SELECT LAST_INSERT_ID()", @null)
+
+        total = 0
+        ref partidas = @@(venta, "&partidas")
+        for i=0; i<list.count(partidas)
+        {
+            ref it = list.obj(partidas, i)
+            ref prod = dbr.rec(db, "SELECT id, precio, existencia FROM productos WHERE sku = @sku", it)
+            // && y || evalúan los dos lados: no ponga isnull(x) || @@(x, ...) en la misma condición
+            if isnull(prod) { do rise_error(404, "No existe " + @@(it, "sku")) }
+            if @@(prod, "#existencia") < @@(it, "#cantidad")
+            {
+                do rise_error(409, "Sin existencia de " + @@(it, "sku"))
+            }
+            new part
+            {
+                @"venta": id_venta
+                @"producto": @@(prod, "#id")
+                @"cantidad": @@(it, "#cantidad")
+                @"precio": @@(prod, "#precio")
+            }
+            do dbr.insert(db, "ventas_partidas", part)
+            do dbr.execute(db, "UPDATE productos SET existencia = existencia - @cantidad WHERE id = @producto", part)
+            total = total + @@(part, "#cantidad") * @@(part, "#precio")
+        }
+
+        new t
+        {
+            @"total": total
+            @"id": id_venta
+        }
+        do dbr.execute(db, "UPDATE ventas SET total = @total WHERE id = @id", t)
+        do dbr.commit(db)
+        return id_venta
+
+        exception
+        {
+            code = last_error_code()
+            msg = last_error()
+            do clear_exceptions()
+            if dbr.in_transaction(db) { do dbr.rollback(db) }
+            do rise_error(code, msg)
+        }
+    }
+
+    ref db = dbr.open("tienda@ejemplos")
+    ref venta = from.json('{"cliente":"Ana","partidas":[{"sku":"CAF-01","cantidad":2},{"sku":"TE-01","cantidad":1}]}')
+    id = registrar_venta(db, venta)
+    do print("venta registrada: " + str(id))
+    exception
+    {
+        do print("no se registró (código " + str(last_error_code()) + "): " + last_error())
+        do clear_exceptions()
+    }
+    do dbr.close(db)
+}

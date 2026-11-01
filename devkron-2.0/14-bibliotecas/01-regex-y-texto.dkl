@@ -1,0 +1,20 @@
+// Propósito: expresiones regulares y utilidades de texto (text.dkh).
+// - En una cadena DKL la barra invertida se escribe doble: "\\d+".
+// - num.round redondea "comercial" (2.5 -> 3); round() del motor es bancario (2.5 -> 2).
+#include "dkli.dkh"
+#!
+program "regex"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "text.dkh"
+
+    do print(str(regex.match("ABC-123", "^[A-Z]+-\\d+$")) + " " + regex.replace("2026-11-01", "(\\d+)-(\\d+)-(\\d+)", "$3/$2/$1"))
+    do print(list.join(regex.find("total 10, iva 1.6, neto 11.6", "\\d+(\\.\\d+)?"), " | "))
+    ref g = regex.groups("Pedido: A-1029 del cliente C-77", "(?<pedido>A-\\d+).*(?<cliente>C-\\d+)")
+    do print("grupos: pedido=" + @@(g, "pedido") + " cliente=" + @@(g, "cliente"))
+    do print(text.slug("Reporte de Ventas: Año 2026") + " | " + text.unaccent("acción") + " | " + text.truncate("Descripción larga", 8))
+    do print("correo válido: " + str(text.is_email("ana@example.com")) + " " + str(text.is_email("ana@")))
+    do print("redondeo: num.round(2.5,0)=" + str(num.round(2.5, 0)) + "  round(2.5,0)=" + str(round(2.5, 0)) + "  num.round(2.345,2)=" + str(num.round(2.345, 2)))
+    do print(html.encode("<b>\"Té\" & café</b>"))
+}

@@ -1,0 +1,14 @@
+// probar: parse
+// Propósito: ver todo lo que llega en @http_context (encabezados, get, post, cookies...). Solo para desarrollo.
+#include "dkli.dkh"
+#!
+program "contexto"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "jsonx.dkh"
+
+    @http_context<"response/headers/content-type">: "text/plain;charset=utf-8"
+    @http_context<"response/output">: "text"
+    @http_context<"response/text">: to.json_pretty(@http_context)
+}

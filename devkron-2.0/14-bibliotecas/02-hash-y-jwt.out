@@ -1,0 +1,5 @@
+sha256: b221d9dbb083a7f33428d7c2a3c3198ae925614d70210e28716ccaa7cd4ddb79
+firma de webhook: /bJ21+v9xG09OPrqKegZJUhIVO3nMgyNqpfOVKu/GeY= ¿coincide? 1
+token aleatorio de 32 caracteres
+JWT: sub=usuario-7 rol=admin vigencia=3600 s
+con otro secreto: rechazado

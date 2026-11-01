@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pedido folio = "A-1" cliente = "Ana &amp; Co." ><total >116.00</total><nota >5 &lt; 6</nota><crudo ><![CDATA[<b>sin tocar</b>]]></crudo><vacio /><x:extra data-id = "9" /></pedido>

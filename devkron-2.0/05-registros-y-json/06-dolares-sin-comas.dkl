@@ -1,0 +1,29 @@
+// Propósito: un bloque $$ sin comas entre elementos es un error, y aparece AL EJECUTAR
+// (no al cargar el archivo), así que -parse no lo detecta. El mensaje trae la línea exacta dentro del bloque.
+// Para registros sin comas use la sintaxis clásica, un campo por línea.
+#include "dkli.dkh"
+#!
+program "sin-comas"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    do print("el programa arranca")
+    new r
+    {$$
+        "a": 1
+        "b": 2
+    $$}
+    exception
+    {
+        do print("error: " + last_error())
+        do clear_exceptions()
+    }
+
+    new r2
+    {
+        @"a": 1
+        @"b": 2
+    }
+    do print("clásica: " + to.json(r2))
+}

@@ -1,0 +1,18 @@
+// Propósito: fechas con hora y zonas horarias (time.dkh). Las fechas siguen siendo números AAAAMMDD.HHMMSS.
+// Unidades: s, m (minutos), h, d, sem, mes, a.
+#include "dkli.dkh"
+#!
+program "zonas"
+{
+    #include "functions.dkh"
+    #include "time.dkh"
+
+    f = 20260131.093000
+    do print("+1 mes: " + str(date.add(f, 1, "mes")) + "  +90 min: " + str(date.add(f, 90, "m")))
+    do print("días del año: " + str(date.diff(20261231, 20260101, "d")) + "  meses completos: " + str(date.diff(20260314, 20260115, "mes")))
+    do print("semana de " + str(f) + ": " + str(date.start(f, "sem")) + " - " + str(date.end(f, "sem")))
+    do print("ISO: " + date.iso(f) + "  HTTP: " + date.http(f))
+    do print("UTC a Ciudad de México: " + str(tz.convert(20260715.120000, "UTC", "America/Mexico_City")))
+    do print("desfase de Bogotá: " + str(tz.offset("America/Bogota", 20260715)) + " minutos")
+    do print("unix: " + str(date.unix_utc(20260101)) + " -> " + str(date.from_unix_utc(1767225600)))
+}

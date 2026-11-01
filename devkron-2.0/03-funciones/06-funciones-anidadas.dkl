@@ -1,0 +1,87 @@
+// Propósito: funciones declaradas dentro de otras funciones. Reglas confirmadas en 2.0.2:
+// 1. La anidada se registra en la tabla GLOBAL de funciones cuando se ejecuta la padre;
+//    antes de eso no existe ("Función no reconocida o no registrada").
+// 2. Después, se puede llamar desde cualquier parte por su nombre.
+// 3. NO ve las variables locales de la padre (no hay closures): solo sus parámetros y las globales @.
+// 4. Si dos funciones declaran una anidada con el mismo nombre, gana la última que se ejecutó.
+//    Para evitarlo, envuélvala en codeblock ":espacio" (ver la segunda parte).
+#include "dkli.dkh"
+#!
+program "anidadas"
+{
+    #include "functions.dkh"
+
+    padre::x
+    {
+        local_de_padre = 100
+        hijo::y
+        {
+            return y + 1
+        }
+        espia::
+        {
+            return local_de_padre
+        }
+        return hijo(x)
+    }
+
+    r = hijo(1)
+    exception
+    {
+        do print("1) antes de ejecutar la padre: " + last_error())
+        do clear_exceptions()
+    }
+
+    do print("padre(5) = " + str(padre(5)))
+    do print("2) ahora hijo(10) existe afuera: " + str(hijo(10)))
+
+    r = espia()
+    exception
+    {
+        do print("3) no ve las variables de la padre: " + last_error())
+        do clear_exceptions()
+    }
+
+    a::
+    {
+        aux::
+        {
+            return "aux de a"
+        }
+        return aux()
+    }
+    b::
+    {
+        aux::
+        {
+            return "aux de b"
+        }
+        return aux()
+    }
+    do print(a() + " / " + b() + " / aux() ahora es: " + aux() + "   <- 4) gana la última")
+
+    // Con codeblock cada una tiene su propio nombre completo
+    c::
+    {
+        codeblock ":c_int"
+        {
+            ayuda::
+            {
+                return "ayuda de c"
+            }
+        }
+        return c_int.ayuda()
+    }
+    d::
+    {
+        codeblock ":d_int"
+        {
+            ayuda::
+            {
+                return "ayuda de d"
+            }
+        }
+        return d_int.ayuda()
+    }
+    do print(c() + " / " + d() + " / c_int.ayuda() sigue siendo: " + c_int.ayuda())
+}

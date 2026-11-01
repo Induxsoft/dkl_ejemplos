@@ -1,0 +1,41 @@
+// Propósito: while y break.
+// - No hay "continue": se resuelve con if/else dentro del ciclo.
+#include "dkli.dkh"
+#!
+program "while"
+{
+    #include "functions.dkh"
+
+    // Algoritmo de Euclides
+    a = 1071
+    b = 462
+    while b != 0
+    {
+        t = mod(a, b)
+        a = b
+        b = t
+    }
+    do print("MCD = " + str(a))
+
+    // Ciclo "infinito" con salida por break
+    n = 0
+    while 1
+    {
+        n = n + 1
+        if n * n > 50 { break }
+    }
+    do print("primer n con n*n > 50: " + str(n))
+
+    // "continue" con if: sumar solo los impares
+    i = 0
+    suma = 0
+    while i < 10
+    {
+        i = i + 1
+        if mod(i, 2) == 1
+        {
+            suma = suma + i
+        }
+    }
+    do print("suma de impares hasta 10: " + str(suma))
+}

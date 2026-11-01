@@ -1,0 +1,4 @@
+*.txt en la carpeta: 1 -> a.txt
+subcarpetas: 1 -> sub
+profundo: tmp-ejemplo-02/a.txt
+profundo: tmp-ejemplo-02/sub/c.txt

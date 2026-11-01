@@ -1,0 +1,24 @@
+// Propósito: operadores aritméticos, de comparación y lógicos.
+// - Las comparaciones devuelven 1 (cierto) o 0 (falso); no hay tipo booleano.
+// - && y || combinan condiciones; not(), mod() y abs() son funciones.
+// - No hay operadores ++, +=, % ni ! : se escribe a = a + 1, mod(a, b), not(x).
+// - El + concatena cadenas, pero no mezcla cadena y número: use str().
+#include "dkli.dkh"
+#!
+program "operadores"
+{
+    #include "functions.dkh"
+
+    a = 17
+    b = 5
+    do print("suma " + str(a + b) + ", resta " + str(a - b) + ", producto " + str(a * b))
+    do print("división " + str(a / b) + ", residuo " + str(mod(a, b)) + ", entera " + str(trun(a / b)))
+    do print("precedencia 4+5*3 = " + str(4 + 5 * 3) + ", (4+5)*3 = " + str((4 + 5) * 3))
+    do print("comparaciones: " + str(a > b) + " " + str(a == b) + " " + str(a != b))
+    do print("lógicos: " + str(a > 10 && b > 10) + " " + str(a > 10 || b > 10) + " " + str(not(a > 10)))
+    a = a + 1
+    do print("incremento: " + str(a))
+    negativo = 0 - a
+    do print("negativo: " + str(negativo) + ", absoluto: " + str(abs(negativo)))
+    do print("if() elige un número: " + str(if(a > b, a, b)) + "; ifstr() una cadena: " + ifstr(a > b, "a gana", "b gana"))
+}

@@ -1,0 +1,21 @@
+// Programa que corre en cada hilo (lo usa 02-hilos.dkl; no se ejecuta solo).
+// Cada hilo es una ejecución aislada: hace sus propios #include y no ve nada del programa que lo lanzó.
+// Recibe el dato en la global @arg (una cadena o número llega envuelto como {"value": ...}).
+// Lo que devuelve al padre es su SALIDA declarativa (el texto del contexto declarativo).
+// meta-xml-declaration vacío quita el encabezado <?xml ...?> de esa salida.
+#include "dkli.dkh"
+#set "meta-xml-declaration" ""
+#!
+program "hilo"
+{
+    #include "functions.dkh"
+    v = field.str(@arg, "value")
+    n = val(v)
+    suma = 0
+    for i=1; i<=n
+    {
+        suma = suma + i
+    }
+    #$
+    resultado{ $"suma(1..#<v>)=#<suma>" }
+}

@@ -1,0 +1,21 @@
+// Propósito: utilidades de fs.dkh: copiar carpetas, agregar a un archivo, mover, tamaño y borrar en profundidad.
+#include "dkli.dkh"
+#!
+program "fs"
+{
+    #include "functions.dkh"
+    #include "fs.dkh"
+
+    do dir.ensure("tmp-origen/sub")
+    do file.wtext("tmp-origen/a.txt", "123")
+    do file.append("tmp-origen/sub/b.log", "uno")
+    do file.append("tmp-origen/sub/b.log", "dos")
+    do dir.copy("tmp-origen", "tmp-copia")
+    do print("bytes copiados: " + str(dir.size("tmp-copia")) + ", b.log = " + file.rtext("tmp-copia/sub/b.log"))
+    do file.move("tmp-copia/a.txt", "tmp-copia/renombrado.txt", @true)
+    do print("¿renombrado? " + str(file.exists("tmp-copia/renombrado.txt")) + ", tamaño: " + str(file.size("tmp-copia/renombrado.txt")))
+    do print("ruta temporal con extensión: " + file.extension(file.temp("csv")))
+    do dir.delete_deep("tmp-origen")
+    do dir.delete_deep("tmp-copia")
+    do print("limpio: " + str(dir.exists("tmp-origen") + dir.exists("tmp-copia")))
+}

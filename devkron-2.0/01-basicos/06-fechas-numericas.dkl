@@ -1,0 +1,23 @@
+// Propósito: fechas como números AAAAMMDD.HHMMSS.
+// - Una fecha es un número decimal: la parte entera es la fecha y la decimal la hora.
+// - ndatetime.* (incorporadas) trabajan SOLO con la parte de fecha: tostr, add y diff ignoran la hora.
+// - Para horas, zonas horarias y unidades de minutos/horas use time.dkh (date.*, tz.*).
+#include "dkli.dkh"
+#!
+program "fechas"
+{
+    #include "functions.dkh"
+    #include "time.dkh"
+
+    f = 20261031.183000
+    do print("año " + str(ndatetime.year(f)) + ", mes " + str(ndatetime.month(f)) + ", día " + str(ndatetime.day(f)))
+    do print("ndatetime.tostr: " + ndatetime.tostr(f, "yyyy-MM-dd HH:mm") + "   <- la hora se pierde")
+    do print("+1 mes (ndatetime.add): " + str(ndatetime.add(f, 1, "m")))
+    do print("días entre fechas: " + str(ndatetime.diff(20261225, 20261101, "d")))
+
+    // time.dkh conserva la hora y entiende más unidades
+    do print("date.add +90 min: " + str(date.add(f, 90, "m")))
+    do print("date.add +1 mes: " + str(date.add(20260131, 1, "mes")) + "  (fin de mes ajustado)")
+    do print("ISO: " + date.iso(f) + "  día de la semana (0=domingo): " + str(date.weekday(f)))
+    do print("inicio y fin de mes: " + str(date.start(f, "mes")) + " - " + str(date.end(f, "mes")))
+}

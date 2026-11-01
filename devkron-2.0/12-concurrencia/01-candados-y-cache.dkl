@@ -1,0 +1,39 @@
+// Propósito: candados por nombre y caché en memoria del proceso (threads.dkh).
+// - threads.lock(nombre, ms) / threads.unlock(nombre): exclusión entre peticiones del MISMO proceso
+//   (p. ej. dos peticiones FastCGI que generan folios). No protege entre procesos ni servidores.
+// - cache.*: memoria del proceso; guarda COPIAS (JSON) de registros y listas; se pierde al reiniciar.
+// - Para números use cache.setnum / cache.incr.
+#include "dkli.dkh"
+#!
+program "candados-cache"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "threads.dkh"
+
+    siguiente_folio::
+    {
+        if not(threads.lock("folio", 5000)) { do rise_error(503, "ocupado") }
+        n = cache.num("folio") + 1
+        do cache.setnum("folio", n, 0)
+        do threads.unlock("folio")
+        return n
+    }
+    do print("folios: " + str(siguiente_folio()) + ", " + str(siguiente_folio()) + ", " + str(siguiente_folio()))
+
+    // Un candado tomado no se vuelve a obtener sin esperar (0 = no esperar)
+    do print("lock: " + str(threads.lock("x", 0)) + " otra vez: " + str(threads.lock("x", 0)))
+    do threads.unlock("x")
+
+    new cfg
+    {
+        @"moneda": "MXN"
+    }
+    do cache.set("config", cfg, 300)
+    ref c = cache.get("config")
+    c<"moneda">: "USD"
+    do print("lo guardado no cambia: " + to.json(cache.get("config")) + " / la copia: " + to.json(c))
+    do print("predeterminado: " + cache.dget("no-existe", "(nada)"))
+    do print("contador atómico: " + str(cache.incr("visitas", 1, 60)) + " " + str(cache.incr("visitas", 1, 60)))
+    do print("solo la primera vez: " + str(cache.set_nx("evento-15", "1", 60)) + " " + str(cache.set_nx("evento-15", "1", 60)))
+}

@@ -1,0 +1,9 @@
+of: ["a","b","c","d"]  atstr(-1)=d atstr(-2)=c
+insertar al inicio y al final: ["inicio","a","b","c","d",99]
+reemplazar el último: ["inicio","a","b","c","d","fin"]
+slice(l, 1, 2): ["a","b"]  slice(l, -2, 9): ["d","fin"]
+merge: [1,2,"inicio","a","b","c","d","fin"]
+copy sobrevive al clear del original: 8
+join: x | 1.5 | z
+split: ["2026","11","01"]  indexstr("11")=1  indexstr("99")=-1
+type (1 cadena, 2 número): 2 1

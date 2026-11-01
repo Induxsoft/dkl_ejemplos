@@ -1,0 +1,21 @@
+// Propósito: dar formato a números para mostrarlos.
+// - format(número, formato) usa cadenas de formato numérico de C# ("#,##0.00", "0.0%", "C", "N2").
+// - La cultura de PRESENTACIÓN es la del servidor, o la de -culture / DEVKRON_CULTURE / "culture" en fastcgi.json.
+//   Este ejemplo se ejecuta con cultura invariante (por eso "C" muestra ¤).
+// - La LECTURA (val, constantes, from.json) siempre es invariante.
+// - Nunca formatee y vuelva a leer con val(): con coma decimal se rompe.
+// - Las marcas #<expr : formato> aplican el mismo formato.
+#include "dkli.dkh"
+#!
+program "formato"
+{
+    #include "functions.dkh"
+
+    total = 1234567.891
+    do print(format(total, "#,##0.00"))
+    do print(format(total, "N2"))
+    do print(format(0.256, "0.0%"))
+    do print(format(7, "000"))
+    do print(format(total, "C"))
+    do print(ftext("Total: #<total:$ #,##0.00>"))
+}

@@ -1,0 +1,34 @@
+// Propósito: escribir una función abierta propia y usarla con go.
+// - expose v1, v2   publica variables internas de la función al bloque del go (solo lectura).
+// - that            (sin nada más) es el punto donde se ejecuta el bloque de quien llama.
+// - go f (v1:alias1, v2:alias2) with(argumentos) -> resultado { bloque }
+// - El bloque corre en el ámbito de QUIEN LLAMA: ve y modifica sus variables.
+#include "dkli.dkh"
+#!
+program "abierta"
+{
+    #include "functions.dkh"
+
+    // Recorre los números de inicio a fin con el paso indicado y expone cada uno.
+    rango::inicio, fin, paso
+    {
+        expose n, vuelta
+        vuelta = 0
+        for n=inicio; n<=fin; n+paso
+        {
+            that
+            vuelta = vuelta + 1
+        }
+        return vuelta
+    }
+
+    suma = 0
+    texto = ""
+    go rango (n:x, vuelta:k) with(10, 20, 5) -> total
+    {
+        suma = suma + x
+        texto = texto + "[" + str(k) + ":" + str(x) + "]"
+    }
+    do print(texto)
+    do print("suma=" + str(suma) + " vueltas=" + str(total))
+}

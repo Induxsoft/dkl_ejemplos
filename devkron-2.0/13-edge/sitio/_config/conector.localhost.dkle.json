@@ -1,0 +1,5 @@
+{
+  "app": { "moneda": "MXN", "iva": 0.16 },
+  "limits": { "timeout_ms": 10000, "max_body_kb": 256 },
+  "outbound": ["api.example.com"]
+}

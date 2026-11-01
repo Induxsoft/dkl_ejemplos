@@ -1,0 +1,29 @@
+// Propósito: ámbitos. Una función solo ve sus parámetros y las variables globales (las que empiezan con @).
+// Las variables del programa principal NO son visibles dentro de las funciones.
+#include "dkli.dkh"
+#!
+program "globales"
+{
+    #include "functions.dkh"
+
+    @iva = 0.16
+    local = 100
+
+    con_iva::importe
+    {
+        return importe * (1 + @iva)
+    }
+
+    usa_local::
+    {
+        return local * 2
+    }
+
+    do print("con IVA: " + str(con_iva(local)))
+    x = usa_local()
+    exception
+    {
+        do print("la función no ve 'local': " + last_error())
+        do clear_exceptions()
+    }
+}

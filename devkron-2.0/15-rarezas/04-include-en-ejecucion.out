@@ -1,0 +1,4 @@
+parte.dkh ve contador = 2
+después del include en el programa: contador = 2
+parte.dkh ve contador = 11
+procesa() devolvió 99

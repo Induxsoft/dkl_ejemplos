@@ -1,0 +1,25 @@
+// Propósito: si una función falla dentro de una expresión, la expresión TERMINA con 0 en lugar del
+// valor de la función: la asignación se hace y las funciones incorporadas (como print) se ejecutan;
+// luego el error se atiende en el exception más cercano (o termina el programa).
+// No confíe en el valor de una variable asignada en una sentencia que falló.
+#include "dkli.dkh"
+#!
+program "error-en-expresion"
+{
+    #include "functions.dkh"
+
+    precio_con_iva::p
+    {
+        x = p / 0
+        return p * 1.16
+    }
+
+    total = 100
+    total = precio_con_iva(total) + 1
+    exception
+    {
+        do print("error: " + last_error())
+        do print("pero 'total' quedó en " + str(total) + "   <- 0 + 1")
+        do clear_exceptions()
+    }
+}

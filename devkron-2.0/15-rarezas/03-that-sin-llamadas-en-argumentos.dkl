@@ -1,0 +1,28 @@
+// Propósito: los argumentos de "that f(...)" no admiten otra llamada a función.
+// that f(abs(x)) -> r  falla al ejecutar con "Función: thatf no reconocida o no registrada".
+// Lo mismo pasa con "go f (...) with(g(x))", pero ahí es error de sintaxis (109) al cargar.
+// Solución: calcule antes el valor en una variable.
+#include "dkli.dkh"
+#!
+program "that-args"
+{
+    #include "functions.dkh"
+
+    doble::x
+    {
+        return x * 2
+    }
+    point f to doble
+    v = -4
+    that f(abs(v)) -> r
+    exception
+    {
+        do print("con una llamada en el argumento: " + last_error())
+        do clear_exceptions()
+    }
+    a = abs(v)
+    that f(a) -> r
+    do print("con variable: " + str(r))
+    that f(v + 10) -> r
+    do print("una expresión sin llamadas sí funciona: " + str(r))
+}

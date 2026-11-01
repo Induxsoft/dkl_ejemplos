@@ -1,0 +1,26 @@
+// Propósito: comprimir y listar con zip.dkh.
+#include "dkli.dkh"
+#!
+program "zip"
+{
+    #include "functions.dkh"
+    #include "fs.dkh"
+    #include "zip.dkh"
+
+    do dir.ensure("tmp-datos/sub")
+    do file.wtext("tmp-datos/a.txt", "hola")
+    do file.wtext("tmp-datos/sub/b.txt", "mundo!")
+    do zip.create("tmp-datos", "tmp-respaldo.zip")
+    do zip.add("tmp-respaldo.zip", "tmp-datos/a.txt", "extra/copia.txt")
+    ref l = zip.list("tmp-respaldo.zip")
+    for i=0; i<list.count(l)
+    {
+        ref e = list.obj(l, i)
+        do print(field.str(e, "name") + " " + str(field.num(e, "size")) + " bytes")
+    }
+    do zip.extract("tmp-respaldo.zip", "tmp-extraido")
+    do print("extraído: " + file.rtext("tmp-extraido/extra/copia.txt"))
+    do dir.delete_deep("tmp-datos")
+    do dir.delete_deep("tmp-extraido")
+    do file.delete("tmp-respaldo.zip")
+}

@@ -1,0 +1,32 @@
+// Propósito: if / else if / else.
+// - La condición va sin paréntesis (se permiten, pero no hacen falta).
+// - Las llaves pueden ir en la misma línea si el bloque tiene una sola sentencia.
+// - Cualquier número distinto de 0 es cierto.
+#include "dkli.dkh"
+#!
+program "if"
+{
+    #include "functions.dkh"
+
+    clasifica::monto
+    {
+        if monto <= 0
+        {
+            return "sin compra"
+        }
+        else if monto < 1000
+        {
+            return "menudeo"
+        }
+        else
+        {
+            return "mayoreo"
+        }
+    }
+
+    do print(clasifica(0) + ", " + clasifica(250) + ", " + clasifica(5000))
+
+    stock = 3
+    if stock { do print("hay existencias") }
+    if not(stock > 10) && stock > 0 { do print("pocas existencias") }
+}

@@ -1,0 +1,23 @@
+// Propósito: la pila de errores. Si no se limpia, los errores se acumulan.
+// - pop_exception() saca solo el último; clear_exceptions() la vacía.
+#include "dkli.dkh"
+#!
+program "pila"
+{
+    #include "functions.dkh"
+
+    do rise_error(1, "primero")
+    exception
+    {
+        do print("1: " + last_error())
+    }
+    do rise_error(2, "segundo")
+    exception
+    {
+        do print("2: " + last_error())
+        do pop_exception()
+        do print("tras pop_exception, el último es: " + last_error())
+        do clear_exceptions()
+        do print("tras clear_exceptions: [" + last_error() + "]")
+    }
+}

@@ -1,0 +1,22 @@
+0 errores, 0 avisos
+== GET /estado
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=utf-8
+X-Powered-By: Devkron
+
+{"ok":1,"moneda":"MXN"}
+
+== POST /pedidos
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=utf-8
+X-Powered-By: Devkron
+
+{"pedido":"1001","moneda":"MXN","subtotal":285.5,"iva":45.68,"total":331.18,"partidas":[{"sku":"CAF-01","cantidad":2,"importe":240},{"sku":"TE-01","cantidad":1,"importe":45.5}]}
+
+== POST /pedidos
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/json;charset=utf-8
+X-Powered-By: Devkron
+
+{"error":"El pedido no trae line_items"}
+

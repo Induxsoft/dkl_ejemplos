@@ -1,0 +1,23 @@
+// probar: parse
+// Propósito: página HTML. El contexto declarativo produce el documento; el imperativo lee parámetros.
+// URL: /index.dkl?nombre=Ana  (sin @http_context en consola, use -parse para revisar la sintaxis).
+#include "dkli.dkh"
+#set "meta-xml-declaration" "<!DOCTYPE html>\r\n"
+html
+{
+    ##
+    #include "functions.dkh"
+    #include "http.dkh"
+    nombre = httpreq.darg("nombre", "visitante")
+    ##
+    head
+    {
+        meta(charset="utf-8"){}
+        title{ $"Inicio" }
+    }
+    body
+    {
+        h1{ "Hola, #<nombre>" }
+        p{ $"Servido por Devkron a las #<date_str(now(), \"HH:mm\")>." }
+    }
+}

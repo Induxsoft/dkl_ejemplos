@@ -1,0 +1,5 @@
+contador de quien llama = 3; fin con i=3
+dentro del bloque v se leyó como: 0 1 2 
+pero ahora quien llama tiene su propia v = 99
+flecha con el alias: {1} La variable mapeada no está disponible [09-go-ambito-y-alias.dkl][Ln= 37]
+copiando primero: [0,1,2]

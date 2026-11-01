@@ -1,0 +1,12 @@
+// Propósito: to.json_pretty (jsonx.dkh) para depurar o escribir bitácoras legibles.
+#include "dkli.dkh"
+#!
+program "json-pretty"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "jsonx.dkh"
+
+    ref r = from.json('{"cliente":"Ana","total":118.50,"partidas":[{"sku":"A1","cant":2}],"notas":[]}')
+    do print(to.json_pretty(r))
+}

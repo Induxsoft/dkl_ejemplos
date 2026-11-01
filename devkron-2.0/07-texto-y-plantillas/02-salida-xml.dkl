@@ -1,0 +1,24 @@
+// Propósito: salida declarativa. Todo lo que no es imperativo se traduce a XML.
+// - #$ pasa al contexto declarativo y #! regresa al imperativo.
+// - Elemento: nombre(atributo="valor") { hijos }. Un elemento vacío necesita llaves: nodo{}.
+// - Atributos separados por espacios, no por comas. Nombres con ':' o '-' van entre comillas.
+// - Texto: "escapado", $"sin escapar", !"en CDATA".
+// - Las marcas #<expr> funcionan en nombres y valores de atributos, nombres de elementos y textos.
+#include "dkli.dkh"
+#!
+program "xml"
+{
+    #include "functions.dkh"
+
+    cliente = "Ana & Co."
+    total = 116
+    #$
+    pedido(folio="A-1" cliente="#<cliente>")
+    {
+        total{ "#<total:0.00>" }
+        nota{ "5 < 6" }
+        crudo{ !"<b>sin tocar</b>" }
+        vacio{}
+        "x:extra"("data-id"="9"){}
+    }
+}

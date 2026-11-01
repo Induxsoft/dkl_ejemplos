@@ -1,0 +1,31 @@
+// Propósito: los dos tipos de valor (número y cadena), las referencias y el tipado estático.
+// - Una variable toma su tipo en la primera asignación y ya no lo cambia.
+// - Los números son decimales exactos: 0.1 + 0.2 da 0.3.
+// - Los objetos (listas, registros) siempre van en variables "ref".
+// - vartype("nombre") recibe el NOMBRE de la variable: 1 cadena, 2 número, 3 objeto, -1 si no existe o está en error.
+#include "dkli.dkh"
+#!
+program "variables"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    precio = 0.1
+    impuesto = 0.2
+    do print("decimal exacto: " + str(precio + impuesto))
+
+    cliente = "Ana"
+    ref lista = list.create()
+    do print("tipos: " + str(vartype("cliente")) + " " + str(vartype("precio")) + " " + str(vartype("lista")))
+
+    // Asignar una cadena a una variable numérica es un error de ejecución.
+    precio = "caro"
+    exception
+    {
+        do print("error esperado: " + last_error())
+        do clear_exceptions()
+    }
+
+    // isset() dice si una variable existe (se pasa su nombre como cadena).
+    do print("¿existe cliente? " + str(isset("cliente")) + "  ¿existe otra? " + str(isset("otra")))
+}

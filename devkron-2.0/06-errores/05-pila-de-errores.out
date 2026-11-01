@@ -1,0 +1,4 @@
+1: {1} primero[Ln= 8]
+2: {2} segundo[Ln= 13]
+tras pop_exception, el último es: {1} primero[Ln= 8]
+tras clear_exceptions: []

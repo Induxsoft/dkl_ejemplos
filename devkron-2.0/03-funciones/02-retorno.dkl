@@ -1,0 +1,46 @@
+// Propósito: valores de retorno.
+// - Sin return, una función devuelve 0 (un número).
+// - Por eso, si una función "de cadena" no llega a un return, quien la usa recibe 0 y
+//   aparece "Tipos no coinciden" en la línea que la llama, no en la función.
+// - Una función puede devolver un objeto; quien la llama lo recibe con "ref".
+#include "dkli.dkh"
+#!
+program "retorno"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    sin_return::
+    {
+        x = 1
+    }
+
+    nombre_mes::m
+    {
+        if m == 1 { return "enero" }
+        if m == 2 { return "febrero" }
+        // falta un return para los demás meses: devuelve 0
+    }
+
+    nuevo_cliente::nombre
+    {
+        new c
+        {
+            @"nombre": nombre
+            @"activo": 1
+        }
+        return c
+    }
+
+    do print("sin return devuelve " + str(sin_return()))
+    do print("mes 2: " + nombre_mes(2))
+    s = "mes 5: " + nombre_mes(5)
+    exception
+    {
+        do print("error esperado: " + last_error())
+        do clear_exceptions()
+    }
+
+    ref c = nuevo_cliente("Ana")
+    do print("objeto devuelto: " + to.json(c))
+}

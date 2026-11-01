@@ -1,0 +1,4 @@
+en variable de valor: 2 (número); en ref: {"k":1}
+list.of con un ref: 2 (2 = número, el índice)
+con flecha: [{"k":1},"a"]
+en registro: {"sin_asterisco":8,"con_asterisco":{"k":1}}

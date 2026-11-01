@@ -1,0 +1,34 @@
+// Propósito: atrapar, limpiar recursos y volver a lanzar conservando el código.
+// Cada nivel agrega su [Ln= n] al mensaje.
+#include "dkli.dkh"
+#!
+program "relanzar"
+{
+    #include "functions.dkh"
+
+    interna::
+    {
+        do rise_error(77, "falló el cálculo")
+    }
+
+    externa::
+    {
+        do interna()
+        exception
+        {
+            code = last_error_code()
+            msg = last_error()
+            do clear_exceptions()
+            do print("externa: limpio recursos y relanzo")
+            do rise_error(code, "en externa: " + msg)
+        }
+        return 1
+    }
+
+    r = externa()
+    exception
+    {
+        do print("principal recibe código " + str(last_error_code()) + ": " + last_error())
+        do clear_exceptions()
+    }
+}

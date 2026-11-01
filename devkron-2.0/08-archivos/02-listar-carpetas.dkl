@@ -1,0 +1,28 @@
+// Propósito: listar archivos y carpetas.
+// - list.files(carpeta, patrón) y list.dirs(carpeta) (functions.dkh) devuelven listas de rutas.
+// - dir.files_deep(carpeta, patrón) (fs.dkh) busca también en subcarpetas, ordenado.
+#include "dkli.dkh"
+#!
+program "listar"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "fs.dkh"
+
+    base = "tmp-ejemplo-02"
+    do dir.ensure(base + "/sub")
+    do file.wtext(base + "/a.txt", "a")
+    do file.wtext(base + "/b.csv", "b")
+    do file.wtext(base + "/sub/c.txt", "c")
+
+    ref txt = list.files(base, "*.txt")
+    do print("*.txt en la carpeta: " + str(list.count(txt)) + " -> " + file.name(list.str(txt, 0)))
+    ref dirs = list.dirs(base)
+    do print("subcarpetas: " + str(list.count(dirs)) + " -> " + file.name(list.str(dirs, 0)))
+    ref todos = dir.files_deep(base, "*.txt")
+    for i=0; i<list.count(todos)
+    {
+        do print("profundo: " + replace(list.str(todos, i), "\\", "/"))
+    }
+    do dir.delete_deep(base)
+}

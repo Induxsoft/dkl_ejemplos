@@ -1,0 +1,8 @@
+suma 22, resta 12, producto 85
+división 3.4, residuo 2, entera 3
+precedencia 4+5*3 = 19, (4+5)*3 = 27
+comparaciones: 1 0 1
+lógicos: 0 1 0
+incremento: 18
+negativo: -18, absoluto: 18
+if() elige un número: 18; ifstr() una cadena: a gana

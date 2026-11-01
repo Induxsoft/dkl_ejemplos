@@ -1,0 +1,55 @@
+// Propósito: que el bloque del go le RESPONDA a la función abierta.
+// La variable expuesta es de solo lectura, pero si expone una referencia a un registro,
+// el bloque sí puede modificar ese registro. Así se escribe, por ejemplo, un "filtrar".
+// Con ->* el resultado (un objeto) se recibe por referencia.
+#include "dkli.dkh"
+#!
+program "go-respuesta"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    filtrar::&lista
+    {
+        expose valor, resp
+        new resp {}
+        ref res = list.create()
+        for i=0; i<list.count(lista)
+        {
+            valor = list.num(lista, i)
+            resp<"ok">: 0
+            that
+            if @@(resp, "#ok") { do list.addnum(res, valor) }
+        }
+        return res
+    }
+
+    ref nums = list.of(3, 8, 1, 12, 5)
+    umbral = 4
+    go filtrar (valor:v, resp:r) with(nums) ->* grandes
+    {
+        r<"ok">: v > umbral
+    }
+    do print("mayores que " + str(umbral) + ": " + to.json(grandes))
+
+    // Alternativa: pasar un registro de contexto como argumento y escribir en él.
+    recorrer::&lista, &ctx
+    {
+        expose valor
+        for i=0; i<list.count(lista)
+        {
+            valor = list.num(lista, i)
+            that
+        }
+        return 0
+    }
+    new acumulado
+    {
+        @"suma": 0
+    }
+    go recorrer (valor:v) with(nums, acumulado)
+    {
+        acumulado<"suma">: @@(acumulado, "#suma") + v
+    }
+    do print("suma acumulada en el contexto: " + to.json(acumulado))
+}

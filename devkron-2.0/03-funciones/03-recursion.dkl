@@ -1,0 +1,34 @@
+// Propósito: recursión. La profundidad máxima ronda los 2,900 niveles; para más, use un ciclo.
+#include "dkli.dkh"
+#!
+program "recursion"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    factorial::n
+    {
+        if n <= 1 { return 1 }
+        return n * factorial(n - 1)
+    }
+
+    // Recorrido recursivo de un árbol de registros
+    suma_arbol::&nodo
+    {
+        total = @@(nodo, "#valor")
+        ref hijos = @@(nodo, "&hijos")
+        if not(isnull(hijos))
+        {
+            for i=0; i<list.count(hijos)
+            {
+                ref h = list.obj(hijos, i)
+                total = total + suma_arbol(h)
+            }
+        }
+        return total
+    }
+
+    do print("25! = " + str(factorial(25)))
+    ref arbol = from.json('{"valor":1,"hijos":[{"valor":2},{"valor":3,"hijos":[{"valor":4}]}]}')
+    do print("suma del árbol = " + str(suma_arbol(arbol)))
+}

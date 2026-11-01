@@ -1,0 +1,48 @@
+// probar: parse
+// Propósito: consultar con dbr.dkh.
+// - dbr.open("conexión@aplicación") abre una conexión definida en connections.xml.
+// - Parámetros: @nombre en el SQL y un registro con esos campos. NUNCA concatene en el SQL
+//   valores que vienen del usuario.
+// - dbr.num / dbr.str: primera columna del primer renglón. dbr.rec: el primer renglón como registro.
+//   dbr.list: todos los renglones como lista de registros. dbr.table: como tabla en memoria.
+// Necesita la base de esquema.sql: aquí solo se valida con -parse.
+#include "dkli.dkh"
+#!
+program "consultar"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "dbr.dkh"
+
+    ref db = dbr.open("tienda@ejemplos")
+
+    n = dbr.num(db, "SELECT COUNT(*) FROM productos", @null)
+    do print("productos: " + str(n))
+
+    new p
+    {
+        @"sku": "CAF-01"
+    }
+    nombre = dbr.str(db, "SELECT nombre FROM productos WHERE sku = @sku", p)
+    ref prod = dbr.rec(db, "SELECT id, nombre, precio FROM productos WHERE sku = @sku", p)
+    do print(nombre + " cuesta " + str(@@(prod, "#precio")))
+
+    new filtro
+    {
+        @"minimo": 1
+    }
+    ref lista = dbr.list(db, "SELECT sku, nombre, existencia FROM productos WHERE existencia >= @minimo ORDER BY nombre", filtro)
+    go foreach.lobj(value:x) with(lista)
+    {
+        ref r = x
+        do print(r.sku + "  " + r.nombre + "  (" + str(r.existencia) + ")")
+    }
+    do print("como JSON: " + to.json(lista))
+
+    do dbr.close(db)
+    exception
+    {
+        do print("error de base de datos: " + last_error())
+        do clear_exceptions()
+    }
+}

@@ -1,0 +1,39 @@
+// Propósito: escribir, leer, agregar y borrar archivos de texto (functions.dkh).
+// - Las rutas relativas son relativas a la carpeta de trabajo (desde donde se ejecuta dkl).
+// - file.wtext/file.rtext usan UTF-8; file.wtexte/file.rtexte reciben otra codificación.
+// - Este ejemplo trabaja en la carpeta temporal "tmp-ejemplo-01" y la borra al final.
+#include "dkli.dkh"
+#!
+program "archivos"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    carpeta = "tmp-ejemplo-01"
+    do dir.ensure(carpeta)
+    archivo = path.concat(carpeta, "notas.txt")
+
+    do file.wtext(archivo, "primera línea\n")
+    do print("¿existe? " + str(file.exists(archivo)) + ", bytes: " + str(file.len(archivo)))
+    contenido = file.rtext(archivo)
+    contenido = contenido + "segunda línea\n"
+    do file.wtext(archivo, contenido)
+    ref lineas = split(trim(file.rtext(archivo)), "\n")
+    do print("líneas: " + to.json(lineas))
+    do print("nombre: " + file.name(archivo) + ", sin extensión: " + file.justname(archivo) + ", extensión: " + file.extension(archivo))
+
+    // Guardar y leer un registro como JSON
+    new cfg
+    {
+        @"moneda": "MXN"
+        @"decimales": 2
+    }
+    do file.wtext(path.concat(carpeta, "cfg.json"), to.json(cfg))
+    ref leido = from.json(file.rtext(path.concat(carpeta, "cfg.json")))
+    do print("JSON leído: moneda=" + @@(leido, "moneda") + " decimales=" + str(@@(leido, "#decimales")))
+
+    do file.delete(archivo)
+    do file.delete(path.concat(carpeta, "cfg.json"))
+    do dir.delete(carpeta)
+    do print("¿sigue la carpeta? " + str(dir.exists(carpeta)))
+}

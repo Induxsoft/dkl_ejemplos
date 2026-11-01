@@ -1,0 +1,4 @@
+decimal exacto: 0.3
+tipos: 1 2 3
+error esperado: {1} La variable 'precio' ya fué inicializada con un tipo diferente al de la asignación [02-variables-y-tipos.dkl][Ln= 19]
+¿existe cliente? 1  ¿existe otra? 0

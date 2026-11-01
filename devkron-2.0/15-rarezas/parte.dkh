@@ -1,0 +1,12 @@
+// Archivo que carga 04-include-en-ejecucion.dkl con la sentencia include (en ejecución).
+// Ese archivo se analiza como un documento APARTE: necesita su propio #include "dkli.dkh", el #! y
+// un único nodo raíz (aquí codeblock). No hace falta repetir functions.dkh: las funciones ya
+// registradas por quien lo incluye siguen disponibles.
+#include "dkli.dkh"
+#!
+codeblock
+{
+    contador = contador + 1
+    do print("parte.dkh ve contador = " + str(contador))
+    if contador > 5 { return 99 }
+}

@@ -1,0 +1,19 @@
+// Propósito: la misma operación mostrada con otra cultura.
+// Este ejemplo se ejecuta con "-culture es-CO" (vea la línea "args" de abajo, que usa probar.sh):
+//   dkl 10-cultura-de-presentacion.dkl -culture es-CO
+// - format(), ndatetime.tostr() y #<expr:formato> muestran con la cultura indicada (coma decimal en es-CO).
+// - str(), val() y las constantes del programa NO cambian: siempre punto decimal.
+// args: -culture es-CO
+#include "dkli.dkh"
+#!
+program "cultura"
+{
+    #include "functions.dkh"
+
+    precio = 1234.5
+    do print("str():    " + str(precio))
+    do print("format(): " + format(precio, "N2"))
+    do print("fecha:    " + ndatetime.tostr(20261101, "dddd d 'de' MMMM 'de' yyyy"))
+    texto = format(precio, "N2")
+    do print("val() de lo formateado: " + str(val(texto)) + "   <- por eso no se formatea y se vuelve a leer")
+}

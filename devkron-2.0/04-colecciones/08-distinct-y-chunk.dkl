@@ -1,0 +1,28 @@
+// Propósito: valores únicos (distinct) y lotes (chunk) con list.indexstr y list.slice.
+#include "dkli.dkh"
+#!
+program "distinct-chunk"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    ref ventas = from.json('[{"cliente":"Ana","total":100},{"cliente":"Luis","total":50},{"cliente":"Ana","total":30},{"cliente":"Eva","total":70},{"cliente":"Luis","total":5}]')
+
+    ref vistos = list.create()
+    go foreach.lobj(value:x) with(ventas)
+    {
+        ref o = x
+        c = o.cliente
+        if list.indexstr(vistos, c) < 0 { c -> vistos }
+    }
+    do print("distinct: " + to.json(vistos))
+
+    ref lotes = list.create()
+    n = list.count(ventas)
+    for j=0; j<n; j+2
+    {
+        ref lote = list.slice(ventas, j, 2)
+        lote -> lotes
+    }
+    do print("lotes de 2: " + str(list.count(lotes)) + "; el último tiene " + str(list.count(list.atobj(lotes, -1))) + " elemento")
+}

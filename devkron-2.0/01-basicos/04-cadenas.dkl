@@ -1,0 +1,24 @@
+// Propósito: funciones de cadena más usadas de functions.dkh.
+// Ojo: left(s, n) NO devuelve los primeros n caracteres: devuelve la cadena desde la posición n
+// (herencia de 1.x). Para los primeros n caracteres use cut(s, n) o substring(s, 0, n).
+#include "dkli.dkh"
+#!
+program "cadenas"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    s = "  Devkron 2.0  "
+    t = trim(s)
+    do print("[" + t + "] longitud " + str(length(t)))
+    do print(toupper(t) + " / " + tolower(t))
+    do print("substring(t, 0, 7) = " + substring(t, 0, 7))
+    do print("cut(t, 3) = " + cut(t, 3) + " ; right(t, 3) = " + right(t, 3))
+    do print("left(t, 3) = " + left(t, 3) + "   <- desde la posición 3, no los primeros 3")
+    do print("replace: " + replace(t, "2.0", "LTS"))
+    do print("padleft: " + padleft("42", 6, "0") + " padright: [" + padright("ab", 5, ".") + "]")
+    do print("findstr (base 0, -1 si no está): " + str(findstr(t, "kron")) + " " + str(findstr(t, "xyz")))
+    ref partes = split("uno,dos,,tres", ",")
+    do print("split: " + to.json(partes))
+    do print("comillas y escapes: \"doble\" 'simple' tab[\t]")
+}

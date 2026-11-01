@@ -1,0 +1,48 @@
+// Propósito: leer y escribir campos con rutas < > y con @@.
+// - r<"a/b">: valor          escribe (los niveles intermedios deben existir).
+// - @@(r, "a/b")              lee como cadena; "#a/b" como número; "&a" como referencia.
+// - Ruta dinámica: r<variable>: valor.
+// - r<"campo"> es una SENTENCIA, no una expresión: en expresiones use @@ o el punto.
+// - Para escribir un campo de nombre calculado: r<k>: v. El prefijo # es solo para LEER:
+//   r<"#" + k>: v crea una llave que se llama literalmente "#...".
+#include "dkli.dkh"
+#!
+program "rutas"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    new p
+    {
+        @"nombre": "Juan"
+        new member @"pareja"
+        {
+            @"edad": 30
+        }
+    }
+    p<"pareja/edad">: 31
+    campo = "ciudad"
+    p<campo>: "Tuxtla"
+    do print(to.json(p))
+    do print("cadena: " + @@(p, "nombre") + ", número: " + str(@@(p, "#pareja/edad") + 1))
+    do print("inexistente como cadena: [" + @@(p, "noexiste") + "], como número: " + str(@@(p, "#noexiste")))
+    ref sub = @@(p, "&pareja")
+    do print("referencia: " + to.json(sub))
+
+    p<"direccion/calle">: "Central"
+    exception
+    {
+        do print("nivel intermedio inexistente: " + last_error())
+        do clear_exceptions()
+    }
+
+    new cuenta {}
+    k = "Ana"
+    cuenta<k>: 10
+    cuenta<"#" + k>: 99
+    do print("escritura con #: " + to.json(cuenta) + "   <- la segunda creó la llave \"#Ana\"")
+    do print("lectura con #: " + str(@@(cuenta, "#" + k)))
+
+    // field.* son la alternativa con valor por omisión
+    do print("field.dstr: " + field.dstr(p, "apodo", "(sin apodo)") + ", field.exist: " + str(field.exist(p, "nombre")))
+}

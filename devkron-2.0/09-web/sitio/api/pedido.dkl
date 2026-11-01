@@ -1,0 +1,40 @@
+// probar: parse
+// Propósito: recibir un cuerpo JSON por POST, validarlo y responder.
+// field.str falla si el campo no existe: para datos que vienen de afuera use field.dstr / field.dnum.
+// Prueba: curl -X POST -H "Content-Type: application/json" -d '{"cliente":"Ana","partidas":[{"cant":2,"precio":10}]}' http://sitio/api/pedido.dkl
+#include "dkli.dkh"
+#!
+program "api-pedido"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+    #include "http.dkh"
+
+    if not(httpreq.is_post())
+    {
+        do httpres.fail("Use POST")
+        do httpres.status(405)
+        return
+    }
+    ref p = httpreq.json()
+    ref partidas = field.dobj(p, "partidas", @null)
+    if field.dstr(p, "cliente", "") == "" || isnull(partidas)
+    {
+        do httpres.fail("Faltan datos")
+        do httpres.status(422)
+        return
+    }
+    total = 0
+    for i=0; i<list.count(partidas)
+    {
+        ref it = list.obj(partidas, i)
+        total = total + field.num(it, "cant") * field.num(it, "precio")
+    }
+    new res
+    {
+        @"cliente": field.dstr(p, "cliente", "")
+        @"total": total
+    }
+    do httpres.ok(res)
+    // Un error no atendido aquí respondería HTTP 500.
+}

@@ -1,0 +1,29 @@
+// Propósito: una función puede devolver una referencia a una función anidada (una "fábrica").
+// Recuerde que la anidada no ve las variables de la padre: si necesita datos, use parámetros o globales @.
+#include "dkli.dkh"
+#!
+program "fabrica"
+{
+    #include "functions.dkh"
+
+    @factor = 1
+
+    fabrica_multiplicador::factor
+    {
+        @factor = factor
+        multiplica::x
+        {
+            return x * @factor
+        }
+        point p to multiplica
+        return p
+    }
+
+    ref por3 = fabrica_multiplicador(3)
+    that por3(7) -> r
+    do print("por3(7) = " + str(r))
+    // Cuidado: la "configuración" vive en una global; otra llamada a la fábrica la cambia para todos.
+    ref por10 = fabrica_multiplicador(10)
+    that por3(7) -> r
+    do print("por3(7) después de crear por10 = " + str(r) + "   <- no hay closures")
+}

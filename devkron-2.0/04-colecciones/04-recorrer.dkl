@@ -1,0 +1,51 @@
+// Propósito: recorrer listas y registros con los iteradores de functions.dkh (funciones abiertas).
+// - foreach.lstr / lnum / lobj   recorren listas y exponen index y value.
+// - foreach.fstr / fnum / fobj   recorren campos de un registro y exponen index, key y value.
+// - Con lobj y fobj, el valor es un objeto: para usarlo cómodamente cópielo a un ref.
+#include "dkli.dkh"
+#!
+program "recorrer"
+{
+    #include "functions.dkh"
+    #include "serialize.dkh"
+
+    ref nombres = list.of("Ana", "Luis")
+    go foreach.lstr(index:i, value:v) with(nombres)
+    {
+        do print("lstr " + str(i) + ": " + v)
+    }
+
+    ref clientes = from.json('[{"n":"Ana","saldo":10},{"n":"Luis","saldo":0}]')
+    go foreach.lobj(index:i, value:c) with(clientes)
+    {
+        ref cli = c
+        do print("lobj " + str(i) + ": " + cli.n + " debe " + str(cli.saldo))
+    }
+
+    new precios
+    {
+        @"cafe": 35
+        @"te": 28.5
+    }
+    go foreach.fnum(index:i, key:k, value:v) with(precios)
+    {
+        do print("fnum " + str(i) + ": " + k + " = " + str(v))
+    }
+
+    new cfg
+    {
+        @"idioma": "es"
+        @"moneda": "MXN"
+    }
+    go foreach.fstr(key:k, value:v) with(cfg)
+    {
+        do print("fstr " + k + " = " + v)
+    }
+
+    // Recorrido clásico con for, sin funciones abiertas
+    for j=0; j<list.count(clientes)
+    {
+        ref x = list.obj(clientes, j)
+        do print("for " + str(j) + ": " + @@(x, "n"))
+    }
+}
