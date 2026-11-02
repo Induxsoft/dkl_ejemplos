@@ -95,7 +95,7 @@ regenere su `.out`.
 | `08-distinct-y-chunk.dkl` | distinct con `list.indexstr`, lotes con `list.slice` |
 | `09-ordenar.dkl` | `list.sort`, `list.sort_by` (estable), `list.reverse` |
 | `10-tablas-en-memoria.dkl` | `table.create(modelo)`, `row.add`, `cell.numc`, `row.upd`; `cell.set` con números no sirve |
-| `11-ref-nacida-de-flecha.dkl` | **Una flecha sobre una `ref` nula ocupa la ranura nula compartida (`@null`)**; patrón seguro con `field.exist` |
+| `11-ref-nacida-de-flecha.dkl` | Flecha sobre una `ref` que vino de `@@` con un campo inexistente: hasta 2.0.2 ocupaba la ranura nula compartida (`@null`); **desde 2.0.3 ya no pasa**. Patrón recomendado con `field.exist` |
 
 ### 05-registros-y-json
 

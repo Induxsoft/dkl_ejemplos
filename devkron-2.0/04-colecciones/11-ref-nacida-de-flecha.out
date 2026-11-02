@@ -1,7 +1,7 @@
-segura:  {"a":[1],"b":[2]}
+recomendada: {"a":[1],"b":[2]}
 isnull(@null) = 1
-isnull(g) tras pedir un campo que no existe: 0   <- se esperaba 1
-ingenua: {"a":[1,2],"b":[1,2]}   <- 'a' y 'b' son la misma lista
-isnull(@null) = 0   <- la ranura nula quedó ocupada
-@@ de un campo inexistente ahora devuelve: [1,2]
-field.exist sigue diciendo la verdad: 0
+isnull(g) tras pedir un campo que no existe: 1
+directa:     {"a":[1],"b":[2]}
+isnull(@null) = 1   <- en 2.0.2 daba 0
+isnull(@@ de un campo inexistente) = 1   <- en 2.0.2 daba 0
+field.exist: 0

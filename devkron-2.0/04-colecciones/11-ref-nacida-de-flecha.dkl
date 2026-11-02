@@ -1,10 +1,12 @@
-// Propósito: una trampa al agrupar con flechas, y su causa.
-// - @@(r, "&campo_inexistente") no devuelve una referencia nula nueva: devuelve 0, y "ref g = 0"
-//   apunta a la ranura de objetos compartida que usan las referencias nulas (la misma de @null).
-// - La flecha x -> g, cuando g es nula, crea la lista EN ESA RANURA. Desde ese momento @null y
-//   cualquier @@(..., "&no_existe") devuelven esa lista: isnull() deja de dar 1 en todo el programa.
-// - Patrón seguro: preguntar con field.exist(r, k) (o field.typeof) y crear la lista con list.create()
-//   antes de usar la flecha. Nunca aplique una flecha a una ref que vino de @@ sin verificarla.
+// Propósito: una flecha sobre una ref que vino de @@ con un campo inexistente, y por qué conviene field.exist.
+// - @@(r, "&campo_inexistente") no devuelve una referencia nula nueva: devuelve 0, y "ref g = 0" apunta a la
+//   ranura de objetos de @null, la que comparten todas las referencias nulas del programa.
+// - Hasta Devkron 2.0.2, la flecha x -> g sobre esa ref creaba la lista EN ESA RANURA: desde ahí @null y cualquier
+//   @@(..., "&no_existe") devolvían esa lista e isnull() dejaba de dar 1 en todo el programa.
+// - Desde Devkron 2.0.3 ya no pasa: la flecha (y new, using, bloques $$ y "v : r<&k>") guarda el objeto en una
+//   ranura nueva y solo g apunta a ella. @null sigue siendo nulo.
+// - Aun así, el patrón recomendado es preguntar con field.exist(r, k) (o field.typeof) y crear la lista con
+//   list.create() antes de la flecha: es claro y funciona igual en todas las versiones.
 #include "dkli.dkh"
 #!
 program "ref-flecha"
@@ -12,7 +14,7 @@ program "ref-flecha"
     #include "functions.dkh"
     #include "serialize.dkh"
 
-    // Forma segura (primero, mientras @null sigue siendo nulo)
+    // Forma recomendada
     new s {}
     for i=0; i<2
     {
@@ -26,10 +28,10 @@ program "ref-flecha"
         v = i + 1
         v -> h
     }
-    do print("segura:  " + to.json(s))
+    do print("recomendada: " + to.json(s))
     do print("isnull(@null) = " + str(isnull(@null)))
 
-    // Forma ingenua
+    // Flecha directa sobre la ref que vino de @@ (en 2.0.2 y anteriores, 'a' y 'b' quedaban como la misma lista)
     new r {}
     x = 1
     y = 2
@@ -37,13 +39,13 @@ program "ref-flecha"
     x -> g
     r<"a*">: g
     ref g = @@(r, "&b")
-    do print("isnull(g) tras pedir un campo que no existe: " + str(isnull(g)) + "   <- se esperaba 1")
+    do print("isnull(g) tras pedir un campo que no existe: " + str(isnull(g)))
     y -> g
     r<"b*">: g
-    do print("ingenua: " + to.json(r) + "   <- 'a' y 'b' son la misma lista")
-    do print("isnull(@null) = " + str(isnull(@null)) + "   <- la ranura nula quedó ocupada")
+    do print("directa:     " + to.json(r))
+    do print("isnull(@null) = " + str(isnull(@null)) + "   <- en 2.0.2 daba 0")
     new vacio {}
     ref z = @@(vacio, "&lo_que_sea")
-    do print("@@ de un campo inexistente ahora devuelve: " + to.json(z))
-    do print("field.exist sigue diciendo la verdad: " + str(field.exist(vacio, "lo_que_sea")))
+    do print("isnull(@@ de un campo inexistente) = " + str(isnull(z)) + "   <- en 2.0.2 daba 0")
+    do print("field.exist: " + str(field.exist(vacio, "lo_que_sea")))
 }
