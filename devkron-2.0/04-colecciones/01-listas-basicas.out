@@ -3,6 +3,6 @@ primero: manzana, último: uva
 0) manzana
 1) pera
 2) uva
-list.add con una cadena numérica: [{}]   <- un objeto, no "3"
+list.add con una cadena numérica y list.addnum: ["3",3]
 tras quitar el primero: ["pera","uva"]
 vacía: 0
